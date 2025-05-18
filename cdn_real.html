@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CDN源站扫描器</title>
+    <!-- 引入Element UI样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .el-form-item { margin-bottom: 20px; }
+        .el-button { margin-top: 20px; }
+        #bashCommand { margin-top: 20px; white-space: pre-wrap; }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <el-form :model="form" label-width="150px">
+            <el-form-item label="CIDR文件路径:">
+                <el-input v-model="form.cidrFile"></el-input>
+            </el-form-item>
+            <el-form-item label="端口:">
+                <el-input v-model="form.port"></el-input>
+            </el-form-item>
+            <el-form-item label="带宽 (例如 10M, 100M):">
+                <el-input v-model="form.bandwidth"></el-input>
+            </el-form-item>
+            <el-form-item label="域名 (例如 example.com):">
+                <el-input v-model="form.domain"></el-input>
+            </el-form-item>
+            <el-form-item label="HTTP方法 (例如 GET, POST):">
+                <el-input v-model="form.httpMethod"></el-input>
+            </el-form-item>
+            <el-form-item label="请求路径 (例如 /login):">
+                <el-input v-model="form.endpoint"></el-input>
+            </el-form-item>
+            <el-form-item label="User-Agent:">
+                <el-input v-model="form.userAgent"></el-input>
+            </el-form-item>
+            <el-form-item label="使用HTTPS:">
+                <el-checkbox v-model="form.useHttps"></el-checkbox>
+            </el-form-item>
+            <el-form-item label="查找内容 (用于grep):">
+                <el-input v-model="form.searchString"></el-input>
+            </el-form-item>
+            <el-form-item>
+                <el-button type="primary" @click="generateBashCommand">生成Bash命令</el-button>
+            </el-form-item>
+        </el-form>
+
+        <el-card class="box-card">
+            <div slot="header" class="clearfix">
+                <span>生成的Bash命令</span>
+            </div>
+            <el-input
+                type="textarea"
+                :rows="10"
+                v-model="bashCommand"
+                readonly
+            ></el-input>
+        </el-card>
+    </div>
+
+    <!-- 引入Vue和Element UI -->
+    <script src="https://unpkg.com/vue@2"></script>
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                form: {
+                    cidrFile: 'cidr.txt',
+                    port: '80',
+                    bandwidth: '10M',
+                    domain: 'example.com',
+                    httpMethod: 'GET',
+                    endpoint: '/login',
+                    userAgent: 'Mozilla/5.0',
+                    useHttps: false,
+                    searchString: 'success'
+                },
+                bashCommand: ''
+            },
+            methods: {
+                generateBashCommand() {
+                    const { cidrFile, port, bandwidth, domain, httpMethod, endpoint, userAgent, useHttps, searchString } = this.form;
+
+                    const openFile = `open_${port}.txt`;
+                    const zgrab2File = `zgrab2_${port}.json`;
+                    const mightFile = `might${port}.txt`;
+
+                    let bashCommand = `# zmap扫描\n`;
+                    bashCommand += `zmap -w ${cidrFile} -p ${port} -o ${openFile} --bandwidth=${bandwidth}\n\n`;
+
+                    bashCommand += `# 添加域名\n`;
+                    bashCommand += `sed -i 's/$/,${domain}/g' ${openFile}\n\n`;
+
+                    bashCommand += `# zgrab2发送HTTP${useHttps ? 'S' : ''}请求\n`;
+                    bashCommand += `docker run --rm -i -v $(pwd):/root/zmap_scan ghcr.io/zmap/zgrab2 -f=/root/zmap_scan/${openFile} -o=/root/zmap_scan/${zgrab2File} http \\\n`;
+                    bashCommand += `  --method=${httpMethod} \\\n`;
+                    bashCommand += `  --server-name="${domain}" \\\n`;
+                    bashCommand += `  --endpoint="${endpoint}" \\\n`;
+                    bashCommand += `  --user-agent="${userAgent}" \\\n`;
+                    if (useHttps) {
+                        bashCommand += `  --use-https \\\n`;
+                    }
+                    bashCommand += `  --port=${port}\n\n`;
+
+                    bashCommand += `# 提取结果\n`;
+                    bashCommand += `cat ${zgrab2File} | grep "${searchString}" | jq -r '.ip + ":${port}"' > ${mightFile}\n`;
+
+                    bashCommand += `echo "扫描完成，结果已保存到 ${mightFile}"\n`;
+
+                    this.bashCommand = bashCommand;
+                }
+            }
+        });
+    </script>
+</body>
+</html>
