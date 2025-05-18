@@ -4,108 +4,190 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CDN源站扫描器</title>
+    <!-- 引入 Element UI 样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        label { display: block; margin-top: 10px; }
-        input, textarea { width: 100%; padding: 5px; }
-        button { margin-top: 20px; padding: 10px 20px; }
-        #bashCommand { margin-top: 20px; white-space: pre-wrap; }
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+        }
+        .main-container {
+            padding: 30px;
+        }
+        .command-box {
+            margin-top: 20px;
+            background: #f5f7fa;
+            padding: 15px;
+            border-radius: 4px;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+        .el-row {
+            margin-bottom: 20px;
+        }
+        .footer-button {
+            margin-top: 30px;
+        }
     </style>
 </head>
 <body>
-    <h1>CDN源站扫描器</h1>
-    <form id="scanForm">
-        <label for="cidrFile">CIDR文件路径:</label>
-        <input type="text" id="cidrFile" name="cidrFile" value="cidr.txt">
+    <div id="app">
+        <el-container>
+            <el-header style="background-color: #409EFF; color: white; padding: 20px;">
+                <h1 style="margin: 0;">CDN源站扫描器</h1>
+            </el-header>
+            <el-main class="main-container">
+                <el-form :model="formData" label-position="top">
+                    <el-row :gutter="20">
+                        <el-col :span="12">
+                            <el-form-item label="CIDR文件路径">
+                                <el-input v-model="formData.cidrFile" placeholder="cidr.txt"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
+                            <el-form-item label="端口">
+                                <el-input v-model="formData.port" placeholder="80"></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
 
-        <label for="port">端口:</label>
-        <input type="text" id="port" name="port" value="80">
+                    <el-row :gutter="20">
+                        <el-col :span="12">
+                            <el-form-item label="带宽 (例如 10M, 100M)">
+                                <el-input v-model="formData.bandwidth" placeholder="10M"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
+                            <el-form-item label="域名 (例如 example.com)">
+                                <el-input v-model="formData.domain" placeholder="example.com"></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
 
-        <label for="bandwidth">带宽 (例如 10M, 100M):</label>
-        <input type="text" id="bandwidth" name="bandwidth" value="10M">
+                    <el-row :gutter="20">
+                        <el-col :span="12">
+                            <el-form-item label="HTTP方法 (例如 GET, POST)">
+                                <el-input v-model="formData.httpMethod" placeholder="GET"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
+                            <el-form-item label="请求路径 (例如 /login)">
+                                <el-input v-model="formData.endpoint" placeholder="/login"></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
 
-        <label for="domain">域名 (例如 example.com):</label>
-        <input type="text" id="domain" name="domain" value="example.com">
+                    <el-form-item label="User-Agent">
+                        <el-input v-model="formData.userAgent" placeholder="Mozilla/5.0..."></el-input>
+                    </el-form-item>
 
-        <label for="httpMethod">HTTP方法 (例如 GET, POST):</label>
-        <input type="text" id="httpMethod" name="httpMethod" value="GET">
+                    <el-row :gutter="20">
+                        <el-col :span="8">
+                            <el-form-item label="自定义HTTP头名称 (用|分隔)">
+                                <el-input v-model="formData.customHeadersNames" placeholder="X-Forwarded-For"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="自定义HTTP头值 (用|分隔)">
+                                <el-input v-model="formData.customHeadersValues" placeholder="127.0.0.1"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="自定义HTTP头分隔符">
+                                <el-input v-model="formData.customHeadersDelimiter" placeholder="|"></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
 
-        <label for="endpoint">请求路径 (例如 /login):</label>
-        <input type="text" id="endpoint" name="endpoint" value="/login">
+                    <el-row :gutter="20">
+                        <el-col :span="6">
+                            <el-form-item label="使用HTTPS">
+                                <el-switch v-model="formData.useHttps"></el-switch>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="18">
+                            <el-form-item label="查找内容 (用于grep)">
+                                <el-input v-model="formData.searchString" placeholder="管理后台"></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
 
-        <label for="userAgent">User-Agent:</label>
-        <input type="text" id="userAgent" name="userAgent" value="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36 Edg/136.0.0.0">
+                    <el-form-item class="footer-button">
+                        <el-button type="primary" @click="generateBashCommand" style="width: 100%">生成Bash命令</el-button>
+                    </el-form-item>
+                </el-form>
 
-        <label for="customHeadersNames">自定义HTTP头名称 (用|分隔):</label>
-        <input type="text" id="customHeadersNames" name="customHeadersNames" value="X-Forwarded-For">
+                <h2>生成的Bash命令</h2>
+                <div class="command-box" v-html="bashCommand"></div>
+            </el-main>
+        </el-container>
+    </div>
 
-        <label for="customHeadersValues">自定义HTTP头值 (用|分隔):</label>
-        <input type="text" id="customHeadersValues" name="customHeadersValues" value="127.0.0.1">
-
-        <label for="customHeadersDelimiter">自定义HTTP头分隔符:</label>
-        <input type="text" id="customHeadersDelimiter" name="customHeadersDelimiter" value="|">
-
-        <label for="useHttps">使用HTTPS:</label>
-        <input type="checkbox" id="useHttps" name="useHttps">
-
-        <label for="searchString">查找内容 (用于grep):</label>
-        <input type="text" id="searchString" name="searchString" value="管理后台">
-
-        <button type="button" onclick="generateBashCommand()">生成Bash命令</button>
-    </form>
-
-    <h2>生成的Bash命令</h2>
-    <textarea id="bashCommand" rows="15" readonly></textarea>
-
+    <!-- 引入 Vue 和 Element UI -->
+    <script src="https://unpkg.com/vue@2/dist/vue.js"></script>
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
     <script>
-        function generateBashCommand() {
-            const form = document.getElementById('scanForm');
-            const cidrFile = form.cidrFile.value;
-            const port = form.port.value;
-            const bandwidth = form.bandwidth.value;
-            const domain = form.domain.value;
-            const httpMethod = form.httpMethod.value;
-            const endpoint = form.endpoint.value;
-            const userAgent = form.userAgent.value;
-            const customHeadersNames = form.customHeadersNames.value;
-            const customHeadersValues = form.customHeadersValues.value;
-            const customHeadersDelimiter = form.customHeadersDelimiter.value;
-            const useHttps = form.useHttps.checked;
-            const searchString = form.searchString.value;
+        new Vue({
+            el: '#app',
+            data() {
+                return {
+                    formData: {
+                        cidrFile: 'cidr.txt',
+                        port: '80',
+                        bandwidth: '10M',
+                        domain: 'example.com',
+                        httpMethod: 'GET',
+                        endpoint: '/login',
+                        userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36 Edg/136.0.0.0',
+                        customHeadersNames: 'X-Forwarded-For',
+                        customHeadersValues: '127.0.0.1',
+                        customHeadersDelimiter: '|',
+                        useHttps: false,
+                        searchString: '管理后台'
+                    },
+                    bashCommand: ''
+                };
+            },
+            methods: {
+                generateBashCommand() {
+                    const data = this.formData;
+                    const openFile = `open_${data.port}.txt`;
+                    const zgrab2File = `zgrab2_${data.domain}_${data.port}.json`;
+                    const mightFile = `result_${data.domain}_${data.port}.txt`;
 
-            const openFile = `open_${port}.txt`;
-            const zgrab2File = `zgrab2_${domain}_${port}.json`;
-            const mightFile = `result_${domain}_${port}.txt`;
+                    let command = `<span style="color: #409EFF"># zmap扫描</span>\n`;
+                    command += `zmap -w ${data.cidrFile} -p ${data.port} -o ${openFile} --bandwidth=${data.bandwidth}\n\n`;
 
-            let bashCommand = `# zmap扫描\n`;
-            bashCommand += `zmap -w ${cidrFile} -p ${port} -o ${openFile} --bandwidth=${bandwidth}\n\n`;
+                    command += `<span style="color: #409EFF"># 添加域名</span>\n`;
+                    command += `sed -i 's/$/,${data.domain}/g' ${openFile}\n\n`;
 
-            bashCommand += `# 添加域名\n`;
-            bashCommand += `sed -i 's/$/,${domain}/g' ${openFile}\n\n`;
+                    command += `<span style="color: #409EFF"># zgrab2发送HTTP${data.useHttps ? 'S' : ''}请求</span>\n`;
+                    command += `docker run --rm -i -v $(pwd):/root/zmap_scan ghcr.io/zmap/zgrab2 -f=/root/zmap_scan/${openFile} -o=/root/zmap_scan/${zgrab2File} http \\\n`;
+                    command += `  --method=${data.httpMethod} \\\n`;
+                    command += `  --server-name="${data.domain}" \\\n`;
+                    command += `  --endpoint="${data.endpoint}" \\\n`;
+                    command += `  --user-agent="${data.userAgent}" \\\n`;
+                    if (data.useHttps) {
+                        command += `  --use-https \\\n`;
+                    }
+                    if (data.customHeadersNames) {
+                        command += `  --custom-headers-names="${data.customHeadersNames}" \\\n`;
+                        command += `  --custom-headers-values="${data.customHeadersValues}" \\\n`;
+                        command += `  --custom-headers-delimiter="${data.customHeadersDelimiter}" \\\n`;
+                    }
+                    command += `  --port=${data.port}\n\n`;
 
-            bashCommand += `# zgrab2发送HTTP${useHttps ? 'S' : ''}请求\n`;
-            bashCommand += `docker run --rm -i -v $(pwd):/root/zmap_scan ghcr.io/zmap/zgrab2 -f=/root/zmap_scan/${openFile} -o=/root/zmap_scan/${zgrab2File} http \\\n`;
-            bashCommand += `  --method=${httpMethod} \\\n`;
-            bashCommand += `  --server-name="${domain}" \\\n`;
-            bashCommand += `  --endpoint="${endpoint}" \\\n`;
-            bashCommand += `  --user-agent="${userAgent}" \\\n`;
-            if (useHttps) {
-                bashCommand += `  --use-https \\\n`;
+                    command += `<span style="color: #409EFF"># 提取结果</span>\n`;
+                    command += `cat ${zgrab2File} | grep "${data.searchString}" | jq -r '.ip + ":${data.port}"' > ${mightFile}\n\n`;
+
+                    command += `<span style="color: #409EFF"># 完成提示</span>\n`;
+                    command += `echo "扫描完成，结果已保存到 ${mightFile}"\n`;
+
+                    this.bashCommand = command;
+                }
             }
-            if (customHeadersNames) {
-                bashCommand += `  --custom-headers-names="${customHeadersNames}" \\\n`;
-                bashCommand += `  --custom-headers-values="${customHeadersValues}" \\\n`;
-                bashCommand += `  --custom-headers-delimiter="${customHeadersDelimiter}" \\\n`;
-            }
-            bashCommand += `  --port=${port}\n\n`;
-
-            bashCommand += `# 提取结果\n`;
-            bashCommand += `cat ${zgrab2File} | grep "${searchString}" | jq -r '.ip + ":${port}"' > ${mightFile}\n`;
-
-            bashCommand += `echo "扫描完成，结果已保存到 ${mightFile}"\n`;
-
-            document.getElementById('bashCommand').value = bashCommand;
-        }
+        });
     </script>
 </body>
 </html>
