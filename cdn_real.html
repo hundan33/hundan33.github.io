@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -113,6 +114,19 @@
                         </el-col>
                     </el-row>
 
+                    <el-row :gutter="20">
+                        <el-col :span="18">
+                            <el-form-item label="Exclude substrings (separated by |)">
+                                <el-input v-model="formData.excludeStrings" placeholder="foo|bar"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="6">
+                            <el-form-item label="Exclude delimiter">
+                                <el-input v-model="formData.excludeDelimiter" placeholder="|"></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+
                     <el-form-item class="footer-button">
                         <el-button type="primary" @click="generateBashCommand" style="width: 100%">生成Bash命令</el-button>
                     </el-form-item>
@@ -144,7 +158,9 @@
                         customHeadersValues: '127.0.0.1',
                         customHeadersDelimiter: '|',
                         useHttps: false,
-                        searchString: '管理后台'
+                        searchString: '管理后台',
+                        excludeStrings: '',
+                        excludeDelimiter: '|'
                     },
                     bashCommand: ''
                 };
@@ -179,7 +195,18 @@
                     command += `  --port=${data.port}\n\n`;
 
                     command += `<span style="color: #409EFF"># 提取结果</span>\n`;
-                    command += `cat ${zgrab2File} | grep "${data.searchString}" | jq -r '.ip + ":${data.port}"' > ${mightFile}\n\n`;
+                    // Build extraction command with optional exclusions
+                    const delimiter = (data.excludeDelimiter && data.excludeDelimiter.length > 0) ? data.excludeDelimiter : '|';
+                    const parts = (data.excludeStrings || '').split(delimiter).map(s => s.trim()).filter(s => s.length > 0);
+                    let extractCmd = `cat ${zgrab2File} | grep "${data.searchString}"`;
+                    if (parts.length > 0) {
+                        // Use grep -Fv with multiple -e patterns for fixed-string exclusion
+                        const escapeForShell = s => s.replace(/["$`\\]/g, m => `\\${m}`);
+                        const excludeArgs = parts.map(p => `-e "${escapeForShell(p)}"`).join(' ');
+                        extractCmd += ` | grep -Fv ${excludeArgs}`;
+                    }
+                    extractCmd += ` | jq -r '.ip + ":${data.port}"' > ${mightFile}\n\n`;
+                    command += extractCmd;
 
                     command += `<span style="color: #409EFF"># 完成提示</span>\n`;
                     command += `echo "扫描完成，结果已保存到 ${mightFile}"\n`;
