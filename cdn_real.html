@@ -127,6 +127,26 @@
                         </el-col>
                     </el-row>
 
+                    <el-row :gutter="20">
+                        <el-col :span="24">
+                            <el-form-item label="Enable batch processing">
+                                <el-switch v-model="formData.enableBatch"></el-switch>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+
+                    <el-row :gutter="20" v-show="formData.enableBatch">
+                        <el-col :span="12">
+                            <el-form-item label="Batch count (split IP list)">
+                                <el-input-number v-model="formData.batchCount" :min="1" :max="100" placeholder="10"></el-input-number>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
+                            <el-form-item label="Auto cleanup intermediate files">
+                                <el-switch v-model="formData.autoCleanup"></el-switch>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
                     <el-form-item class="footer-button">
                         <el-button type="primary" @click="generateBashCommand" style="width: 100%">生成Bash命令</el-button>
                     </el-form-item>
@@ -160,7 +180,10 @@
                         useHttps: false,
                         searchString: '管理后台',
                         excludeStrings: '',
-                        excludeDelimiter: '|'
+                        excludeDelimiter: '|',
+                        enableBatch: true,
+                        batchCount: 10,
+                        autoCleanup: true
                     },
                     bashCommand: ''
                 };
@@ -169,47 +192,117 @@
                 generateBashCommand() {
                     const data = this.formData;
                     const openFile = `open_${data.port}.txt`;
-                    const zgrab2File = `zgrab2_${data.domain}_${data.port}.json`;
-                    const mightFile = `result_${data.domain}_${data.port}.txt`;
+                    const resultFile = `result_${data.domain}_${data.port}.txt`;
 
-                    let command = `<span style="color: #409EFF"># zmap扫描</span>\n`;
+                    let command = `<span style="color: #409EFF"># Step 1: zmap scan</span>\n`;
                     command += `zmap -w ${data.cidrFile} -p ${data.port} -o ${openFile} --bandwidth=${data.bandwidth}\n\n`;
 
-                    command += `<span style="color: #409EFF"># 添加域名</span>\n`;
+                    command += `<span style="color: #409EFF"># Step 2: Add domain to each IP</span>\n`;
                     command += `sed -i 's/$/,${data.domain}/g' ${openFile}\n\n`;
 
-                    command += `<span style="color: #409EFF"># zgrab2发送HTTP${data.useHttps ? 'S' : ''}请求</span>\n`;
-                    command += `docker run --rm -i -v $(pwd):/root/zmap_scan ghcr.io/zmap/zgrab2 -f=/root/zmap_scan/${openFile} -o=/root/zmap_scan/${zgrab2File} http \\\n`;
-                    command += `  --method=${data.httpMethod} \\\n`;
-                    command += `  --server-name="${data.domain}" \\\n`;
-                    command += `  --endpoint="${data.endpoint}" \\\n`;
-                    command += `  --user-agent="${data.userAgent}" \\\n`;
-                    if (data.useHttps) {
-                        command += `  --use-https \\\n`;
-                    }
-                    if (data.customHeadersNames) {
-                        command += `  --custom-headers-names="${data.customHeadersNames}" \\\n`;
-                        command += `  --custom-headers-values="${data.customHeadersValues}" \\\n`;
-                        command += `  --custom-headers-delimiter="${data.customHeadersDelimiter}" \\\n`;
-                    }
-                    command += `  --port=${data.port}\n\n`;
+                    if (data.enableBatch) {
+                        // Batch processing mode
+                        const batchCount = data.batchCount || 10;
 
-                    command += `<span style="color: #409EFF"># 提取结果</span>\n`;
-                    // Build extraction command with optional exclusions
-                    const delimiter = (data.excludeDelimiter && data.excludeDelimiter.length > 0) ? data.excludeDelimiter : '|';
-                    const parts = (data.excludeStrings || '').split(delimiter).map(s => s.trim()).filter(s => s.length > 0);
-                    let extractCmd = `cat ${zgrab2File} | grep "${data.searchString}"`;
-                    if (parts.length > 0) {
-                        // Use grep -Fv with multiple -e patterns for fixed-string exclusion
-                        const escapeForShell = s => s.replace(/["$`\\]/g, m => `\\${m}`);
-                        const excludeArgs = parts.map(p => `-e "${escapeForShell(p)}"`).join(' ');
-                        extractCmd += ` | grep -Fv ${excludeArgs}`;
-                    }
-                    extractCmd += ` | jq -r '.ip + ":${data.port}"' > ${mightFile}\n\n`;
-                    command += extractCmd;
+                        command += `<span style="color: #409EFF"># Step 3: Split file into ${batchCount} batches</span>\n`;
+                        command += `total_lines=$(wc -l < ${openFile})\n`;
+                        command += `lines_per_batch=$((($total_lines + ${batchCount} - 1) / ${batchCount}))\n`;
+                        command += `split -l $lines_per_batch ${openFile} ${openFile.replace('.txt', '_')}\n`;
+                        command += `for file in ${openFile.replace('.txt', '_')}*; do mv "$file" "$file.txt"; done\n\n`;
 
-                    command += `<span style="color: #409EFF"># 完成提示</span>\n`;
-                    command += `echo "扫描完成，结果已保存到 ${mightFile}"\n`;
+                        command += `<span style="color: #409EFF"># Step 4: Initialize result file</span>\n`;
+                        command += `> ${resultFile}\n\n`;
+
+                        command += `<span style="color: #409EFF"># Step 5: Process each batch</span>\n`;
+                        command += `batch_num=1\n`;
+                        command += `for batch_file in ${openFile.replace('.txt', '_')}*.txt; do\n`;
+                        command += `    echo "Processing batch $batch_num: $batch_file"\n`;
+                        command += `    \n`;
+                        command += `    # zgrab2 scan for current batch\n`;
+                        command += `    zgrab2_output="zgrab2_${data.domain}_${data.port}_batch_$batch_num.json"\n`;
+                        command += `    docker run --rm -i -v $(pwd):/root/zmap_scan ghcr.io/zmap/zgrab2 -f=/root/zmap_scan/$batch_file -o=/root/zmap_scan/$zgrab2_output http \\\n`;
+                        command += `      --method=${data.httpMethod} \\\n`;
+                        command += `      --server-name="${data.domain}" \\\n`;
+                        command += `      --endpoint="${data.endpoint}" \\\n`;
+                        command += `      --user-agent="${data.userAgent}" \\\n`;
+                        if (data.useHttps) {
+                            command += `      --use-https \\\n`;
+                        }
+                        if (data.customHeadersNames) {
+                            command += `      --custom-headers-names="${data.customHeadersNames}" \\\n`;
+                            command += `      --custom-headers-values="${data.customHeadersValues}" \\\n`;
+                            command += `      --custom-headers-delimiter="${data.customHeadersDelimiter}" \\\n`;
+                        }
+                        command += `      --port=${data.port}\n`;
+                        command += `    \n`;
+                        command += `    # Extract and append results\n`;
+                        const delimiter = (data.excludeDelimiter && data.excludeDelimiter.length > 0) ? data.excludeDelimiter : '|';
+                        const parts = (data.excludeStrings || '').split(delimiter).map(s => s.trim()).filter(s => s.length > 0);
+                        let extractCmd = `    cat $zgrab2_output | grep "${data.searchString}"`;
+                        if (parts.length > 0) {
+                            const escapeForShell = s => s.replace(/["$`\\]/g, m => `\\${m}`);
+                            const excludeArgs = parts.map(p => `-e "${escapeForShell(p)}"`).join(' ');
+                            extractCmd += ` | grep -Fv ${excludeArgs}`;
+                        }
+                        extractCmd += ` | jq -r '.ip + ":${data.port}"' >> ${resultFile}\n`;
+                        command += extractCmd;
+                        command += `    \n`;
+
+                        if (data.autoCleanup) {
+                            command += `    # Cleanup intermediate files\n`;
+                            command += `    rm -f $zgrab2_output\n`;
+                            command += `    rm -f $batch_file\n`;
+                        }
+                        command += `    \n`;
+                        command += `    batch_num=$((batch_num + 1))\n`;
+                        command += `done\n\n`;
+
+                        if (data.autoCleanup) {
+                            command += `<span style="color: #409EFF"># Step 6: Final cleanup</span>\n`;
+                            command += `rm -f ${openFile}\n`;
+                            command += `rm -f ${openFile.replace('.txt', '_')}*.txt\n\n`;
+                        }
+
+                        command += `<span style="color: #409EFF"># Step 7: Display results</span>\n`;
+                        command += `echo "Batch processing completed. Results saved to ${resultFile}"\n`;
+                        command += `echo "Total results found: $(wc -l < ${resultFile})"\n`;
+
+                    } else {
+                        // Non-batch processing mode (original logic)
+                        const zgrab2File = `zgrab2_${data.domain}_${data.port}.json`;
+
+                        command += `<span style="color: #409EFF"># Step 3: zgrab2 send HTTP${data.useHttps ? 'S' : ''} requests</span>\n`;
+                        command += `docker run --rm -i -v $(pwd):/root/zmap_scan ghcr.io/zmap/zgrab2 -f=/root/zmap_scan/${openFile} -o=/root/zmap_scan/${zgrab2File} http \\\n`;
+                        command += `  --method=${data.httpMethod} \\\n`;
+                        command += `  --server-name="${data.domain}" \\\n`;
+                        command += `  --endpoint="${data.endpoint}" \\\n`;
+                        command += `  --user-agent="${data.userAgent}" \\\n`;
+                        if (data.useHttps) {
+                            command += `  --use-https \\\n`;
+                        }
+                        if (data.customHeadersNames) {
+                            command += `  --custom-headers-names="${data.customHeadersNames}" \\\n`;
+                            command += `  --custom-headers-values="${data.customHeadersValues}" \\\n`;
+                            command += `  --custom-headers-delimiter="${data.customHeadersDelimiter}" \\\n`;
+                        }
+                        command += `  --port=${data.port}\n\n`;
+
+                        command += `<span style="color: #409EFF"># Step 4: Extract results</span>\n`;
+                        const delimiter = (data.excludeDelimiter && data.excludeDelimiter.length > 0) ? data.excludeDelimiter : '|';
+                        const parts = (data.excludeStrings || '').split(delimiter).map(s => s.trim()).filter(s => s.length > 0);
+                        let extractCmd = `cat ${zgrab2File} | grep "${data.searchString}"`;
+                        if (parts.length > 0) {
+                            const escapeForShell = s => s.replace(/["$`\\]/g, m => `\\${m}`);
+                            const excludeArgs = parts.map(p => `-e "${escapeForShell(p)}"`).join(' ');
+                            extractCmd += ` | grep -Fv ${excludeArgs}`;
+                        }
+                        extractCmd += ` | jq -r '.ip + ":${data.port}"' > ${resultFile}\n\n`;
+                        command += extractCmd;
+
+                        command += `<span style="color: #409EFF"># Step 5: Display results</span>\n`;
+                        command += `echo "Scan completed. Results saved to ${resultFile}"\n`;
+                        command += `echo "Total results found: $(wc -l < ${resultFile})"\n`;
+                    }
 
                     this.bashCommand = command;
                 }
