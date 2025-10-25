@@ -128,6 +128,14 @@
                     </el-row>
 
                     <el-row :gutter="20">
+                        <el-col :span="24">
+                            <el-form-item label="启用排除功能">
+                                <el-switch v-model="formData.enableExclude"></el-switch>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+
+                    <el-row :gutter="20" v-show="formData.enableExclude">
                         <el-col :span="18">
                             <el-form-item label="Exclude substrings (separated by |)">
                                 <el-input v-model="formData.excludeStrings" placeholder="foo|bar"></el-input>
@@ -160,6 +168,23 @@
                             </el-form-item>
                         </el-col>
                     </el-row>
+
+                    <el-row :gutter="20">
+                        <el-col :span="12">
+                            <el-form-item label="启用测试模式">
+                                <el-switch v-model="formData.testMode"></el-switch>
+                                <div style="font-size: 12px; color: #909399; margin-top: 5px;">
+                                    开启后将跳过zmap扫描，直接使用指定的测试IP
+                                </div>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="12" v-show="formData.testMode">
+                            <el-form-item label="测试IP地址">
+                                <el-input v-model="formData.testIp" placeholder="192.168.1.1"></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+
                     <el-form-item class="footer-button">
                         <el-button type="primary" @click="generateBashCommand" style="width: 100%">生成Bash命令</el-button>
                     </el-form-item>
@@ -198,7 +223,10 @@
                         batchCount: 10,
                         autoCleanup: true,
                         enableDomain: true,
-                        enableCustomHeaders: false
+                        enableCustomHeaders: false,
+                        enableExclude: true,
+                        testMode: false,
+                        testIp: ''
                     },
                     bashCommand: ''
                 };
@@ -213,31 +241,54 @@
                     const openFile = `open_${data.port}.txt`;
                     const resultFile = `result_${data.domain}_${data.port}.txt`;
 
-                    let command = `<span style="color: #409EFF"># Step 1: zmap scan</span>\n`;
-                    command += `zmap -w ${data.cidrFile} -p ${data.port} -o ${openFile} --bandwidth=${data.bandwidth}\n\n`;
+                    let command = '';
 
-                    if (data.enableDomain) {
-                        command += `<span style="color: #409EFF"># Step 2: Add domain to each IP</span>\n`;
-                        command += `sed -i 's/$/,${data.domain}/g' ${openFile}\n\n`;
+                    if (data.testMode) {
+                        // 测试模式：直接使用测试IP
+                        command += `<span style="color: #409EFF"># Test Mode: Using test IP</span>\n`;
+                        if (data.enableDomain) {
+                            command += `echo "${data.testIp},${data.domain}" > ${openFile}\n\n`;
+                        } else {
+                            command += `echo "${data.testIp}" > ${openFile}\n\n`;
+                        }
+                    } else {
+                        // 正常模式：使用zmap扫描
+                        command += `<span style="color: #409EFF"># Step 1: zmap scan</span>\n`;
+                        command += `zmap -w ${data.cidrFile} -p ${data.port} -o ${openFile} --bandwidth=${data.bandwidth}\n\n`;
+
+                        if (data.enableDomain) {
+                            command += `<span style="color: #409EFF"># Step 2: Add domain to each IP</span>\n`;
+                            command += `sed -i 's/$/,${data.domain}/g' ${openFile}\n\n`;
+                        }
                     }
 
                     if (data.enableBatch) {
                         // Batch processing mode
                         const batchCount = data.batchCount || 10;
 
-                        command += `<span style="color: #409EFF"># Step 3: Split file into ${batchCount} batches</span>\n`;
-                        command += `total_lines=$(wc -l < ${openFile})\n`;
-                        command += `lines_per_batch=$((($total_lines + ${batchCount} - 1) / ${batchCount}))\n`;
-                        command += `split -l $lines_per_batch ${openFile} ${openFile.replace('.txt', '_')}\n`;
-                        command += `for file in ${openFile.replace('.txt', '_')}*; do mv "$file" "$file.txt"; done\n\n`;
+                        if (data.testMode) {
+                            // 测试模式下直接处理单个IP，不需要分割
+                            command += `<span style="color: #409EFF"># Test Mode: Direct processing</span>\n`;
+                            command += `> ${resultFile}\n\n`;
+                        } else {
+                            command += `<span style="color: #409EFF"># Step 3: Split file into ${batchCount} batches</span>\n`;
+                            command += `total_lines=$(wc -l < ${openFile})\n`;
+                            command += `lines_per_batch=$((($total_lines + ${batchCount} - 1) / ${batchCount}))\n`;
+                            command += `split -l $lines_per_batch ${openFile} ${openFile.replace('.txt', '_')}\n`;
+                            command += `for file in ${openFile.replace('.txt', '_')}*; do mv "$file" "$file.txt"; done\n\n`;
 
-                        command += `<span style="color: #409EFF"># Step 4: Initialize result file</span>\n`;
-                        command += `> ${resultFile}\n\n`;
+                            command += `<span style="color: #409EFF"># Step 4: Initialize result file</span>\n`;
+                            command += `> ${resultFile}\n\n`;
+                        }
 
                         command += `<span style="color: #409EFF"># Step 5: Process each batch</span>\n`;
                         command += `batch_num=1\n`;
-                        command += `for batch_file in ${openFile.replace('.txt', '_')}*.txt; do\n`;
-                        command += `    echo "Processing batch $batch_num: $batch_file"\n`;
+                        if (data.testMode) {
+                            command += `batch_file=${openFile}\n`;
+                        } else {
+                            command += `for batch_file in ${openFile.replace('.txt', '_')}*.txt; do\n`;
+                            command += `    echo "Processing batch $batch_num: $batch_file"\n`;
+                        }
                         command += `    \n`;
                         command += `    # zgrab2 scan for current batch\n`;
                         command += `    zgrab2_output="zgrab2_${data.domain}_${data.port}_batch_$batch_num.json"\n`;
@@ -259,13 +310,15 @@
                         command += `      --port=${data.port}\n`;
                         command += `    \n`;
                         command += `    # Extract and append results\n`;
-                        const delimiter = (data.excludeDelimiter && data.excludeDelimiter.length > 0) ? data.excludeDelimiter : '|';
-                        const parts = (data.excludeStrings || '').split(delimiter).map(s => s.trim()).filter(s => s.length > 0);
                         const escapeForShell = s => s.replace(/["$`\\{}]/g, m => `\\${m}`);
                         let extractCmd = `    cat $zgrab2_output | grep "${escapeForShell(data.searchString)}"`;
-                        if (parts.length > 0) {
-                            const excludeArgs = parts.map(p => `-e "${escapeForShell(p)}"`).join(' ');
-                            extractCmd += ` | grep -Fv ${excludeArgs}`;
+                        if (data.enableExclude && data.excludeStrings) {
+                            const delimiter = (data.excludeDelimiter && data.excludeDelimiter.length > 0) ? data.excludeDelimiter : '|';
+                            const parts = (data.excludeStrings || '').split(delimiter).map(s => s.trim()).filter(s => s.length > 0);
+                            if (parts.length > 0) {
+                                const excludeArgs = parts.map(p => `-e "${escapeForShell(p)}"`).join(' ');
+                                extractCmd += ` | grep -Fv ${excludeArgs}`;
+                            }
                         }
                         extractCmd += ` | jq -r '.ip + ":${data.port}"' >> ${resultFile}\n`;
                         command += extractCmd;
@@ -278,12 +331,20 @@
                         }
                         command += `    \n`;
                         command += `    batch_num=$((batch_num + 1))\n`;
-                        command += `done\n\n`;
+                        if (!data.testMode) {
+                            command += `done\n\n`;
+                        } else {
+                            command += `\n`;
+                        }
 
                         if (data.autoCleanup) {
                             command += `<span style="color: #409EFF"># Step 6: Final cleanup</span>\n`;
-                            command += `rm -f ${openFile}\n`;
-                            command += `rm -f ${openFile.replace('.txt', '_')}*.txt\n\n`;
+                            if (data.testMode) {
+                                command += `rm -f ${openFile}\n\n`;
+                            } else {
+                                command += `rm -f ${openFile}\n`;
+                                command += `rm -f ${openFile.replace('.txt', '_')}*.txt\n\n`;
+                            }
                         }
 
                         command += `<span style="color: #409EFF"># Step 7: Display results</span>\n`;
@@ -313,13 +374,15 @@
                         command += `  --port=${data.port}\n\n`;
 
                         command += `<span style="color: #409EFF"># Step 4: Extract results</span>\n`;
-                        const delimiter = (data.excludeDelimiter && data.excludeDelimiter.length > 0) ? data.excludeDelimiter : '|';
-                        const parts = (data.excludeStrings || '').split(delimiter).map(s => s.trim()).filter(s => s.length > 0);
                         const escapeForShell = s => s.replace(/["$`\\{}]/g, m => `\\${m}`);
                         let extractCmd = `cat ${zgrab2File} | grep "${escapeForShell(data.searchString)}"`;
-                        if (parts.length > 0) {
-                            const excludeArgs = parts.map(p => `-e "${escapeForShell(p)}"`).join(' ');
-                            extractCmd += ` | grep -Fv ${excludeArgs}`;
+                        if (data.enableExclude && data.excludeStrings) {
+                            const delimiter = (data.excludeDelimiter && data.excludeDelimiter.length > 0) ? data.excludeDelimiter : '|';
+                            const parts = (data.excludeStrings || '').split(delimiter).map(s => s.trim()).filter(s => s.length > 0);
+                            if (parts.length > 0) {
+                                const excludeArgs = parts.map(p => `-e "${escapeForShell(p)}"`).join(' ');
+                                extractCmd += ` | grep -Fv ${excludeArgs}`;
+                            }
                         }
                         extractCmd += ` | jq -r '.ip + ":${data.port}"' > ${resultFile}\n\n`;
                         command += extractCmd;
