@@ -238,9 +238,9 @@
                         command += `    # Extract and append results\n`;
                         const delimiter = (data.excludeDelimiter && data.excludeDelimiter.length > 0) ? data.excludeDelimiter : '|';
                         const parts = (data.excludeStrings || '').split(delimiter).map(s => s.trim()).filter(s => s.length > 0);
-                        let extractCmd = `    cat $zgrab2_output | grep "${data.searchString}"`;
+                        const escapeForShell = s => s.replace(/["$`\\{}]/g, m => `\\${m}`);
+                        let extractCmd = `    cat $zgrab2_output | grep "${escapeForShell(data.searchString)}"`;
                         if (parts.length > 0) {
-                            const escapeForShell = s => s.replace(/["$`\\]/g, m => `\\${m}`);
                             const excludeArgs = parts.map(p => `-e "${escapeForShell(p)}"`).join(' ');
                             extractCmd += ` | grep -Fv ${excludeArgs}`;
                         }
@@ -290,9 +290,9 @@
                         command += `<span style="color: #409EFF"># Step 4: Extract results</span>\n`;
                         const delimiter = (data.excludeDelimiter && data.excludeDelimiter.length > 0) ? data.excludeDelimiter : '|';
                         const parts = (data.excludeStrings || '').split(delimiter).map(s => s.trim()).filter(s => s.length > 0);
-                        let extractCmd = `cat ${zgrab2File} | grep "${data.searchString}"`;
+                        const escapeForShell = s => s.replace(/["$`\\{}]/g, m => `\\${m}`);
+                        let extractCmd = `cat ${zgrab2File} | grep "${escapeForShell(data.searchString)}"`;
                         if (parts.length > 0) {
-                            const escapeForShell = s => s.replace(/["$`\\]/g, m => `\\${m}`);
                             const excludeArgs = parts.map(p => `-e "${escapeForShell(p)}"`).join(' ');
                             extractCmd += ` | grep -Fv ${excludeArgs}`;
                         }
