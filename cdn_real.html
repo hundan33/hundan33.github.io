@@ -61,7 +61,12 @@
                         </el-col>
                         <el-col :span="12">
                             <el-form-item label="域名 (例如 example.com)">
-                                <el-input v-model="formData.domain" placeholder="example.com"></el-input>
+                                <el-input v-model="formData.domain" placeholder="example.com" :disabled="!formData.enableDomain"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
+                            <el-form-item label="启用域名功能">
+                                <el-switch v-model="formData.enableDomain" active-text="启用" inactive-text="禁用"></el-switch>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -84,6 +89,14 @@
                     </el-form-item>
 
                     <el-row :gutter="20">
+                        <el-col :span="12">
+                            <el-form-item label="启用自定义HTTP头">
+                                <el-switch v-model="formData.enableCustomHeaders" active-text="启用" inactive-text="禁用"></el-switch>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+
+                    <el-row :gutter="20" v-show="formData.enableCustomHeaders">
                         <el-col :span="8">
                             <el-form-item label="自定义HTTP头名称 (用|分隔)">
                                 <el-input v-model="formData.customHeadersNames" placeholder="X-Forwarded-For"></el-input>
@@ -183,10 +196,16 @@
                         excludeDelimiter: '|',
                         enableBatch: true,
                         batchCount: 10,
-                        autoCleanup: true
+                        autoCleanup: true,
+                        enableDomain: true,
+                        enableCustomHeaders: false
                     },
                     bashCommand: ''
                 };
+            },
+            mounted() {
+                // 页面加载时自动读取保存的参数
+                this.loadParameters();
             },
             methods: {
                 generateBashCommand() {
@@ -197,8 +216,10 @@
                     let command = `<span style="color: #409EFF"># Step 1: zmap scan</span>\n`;
                     command += `zmap -w ${data.cidrFile} -p ${data.port} -o ${openFile} --bandwidth=${data.bandwidth}\n\n`;
 
-                    command += `<span style="color: #409EFF"># Step 2: Add domain to each IP</span>\n`;
-                    command += `sed -i 's/$/,${data.domain}/g' ${openFile}\n\n`;
+                    if (data.enableDomain) {
+                        command += `<span style="color: #409EFF"># Step 2: Add domain to each IP</span>\n`;
+                        command += `sed -i 's/$/,${data.domain}/g' ${openFile}\n\n`;
+                    }
 
                     if (data.enableBatch) {
                         // Batch processing mode
@@ -222,13 +243,15 @@
                         command += `    zgrab2_output="zgrab2_${data.domain}_${data.port}_batch_$batch_num.json"\n`;
                         command += `    docker run --rm -i -v $(pwd):/root/zmap_scan ghcr.io/zmap/zgrab2 -f=/root/zmap_scan/$batch_file -o=/root/zmap_scan/$zgrab2_output http \\\n`;
                         command += `      --method=${data.httpMethod} \\\n`;
-                        command += `      --server-name="${data.domain}" \\\n`;
+                        if (data.enableDomain) {
+                            command += `      --server-name="${data.domain}" \\\n`;
+                        }
                         command += `      --endpoint="${data.endpoint}" \\\n`;
                         command += `      --user-agent="${data.userAgent}" \\\n`;
                         if (data.useHttps) {
                             command += `      --use-https \\\n`;
                         }
-                        if (data.customHeadersNames) {
+                        if (data.enableCustomHeaders && data.customHeadersNames) {
                             command += `      --custom-headers-names="${data.customHeadersNames}" \\\n`;
                             command += `      --custom-headers-values="${data.customHeadersValues}" \\\n`;
                             command += `      --custom-headers-delimiter="${data.customHeadersDelimiter}" \\\n`;
@@ -274,13 +297,15 @@
                         command += `<span style="color: #409EFF"># Step 3: zgrab2 send HTTP${data.useHttps ? 'S' : ''} requests</span>\n`;
                         command += `docker run --rm -i -v $(pwd):/root/zmap_scan ghcr.io/zmap/zgrab2 -f=/root/zmap_scan/${openFile} -o=/root/zmap_scan/${zgrab2File} http \\\n`;
                         command += `  --method=${data.httpMethod} \\\n`;
-                        command += `  --server-name="${data.domain}" \\\n`;
+                        if (data.enableDomain) {
+                            command += `  --server-name="${data.domain}" \\\n`;
+                        }
                         command += `  --endpoint="${data.endpoint}" \\\n`;
                         command += `  --user-agent="${data.userAgent}" \\\n`;
                         if (data.useHttps) {
                             command += `  --use-https \\\n`;
                         }
-                        if (data.customHeadersNames) {
+                        if (data.enableCustomHeaders && data.customHeadersNames) {
                             command += `  --custom-headers-names="${data.customHeadersNames}" \\\n`;
                             command += `  --custom-headers-values="${data.customHeadersValues}" \\\n`;
                             command += `  --custom-headers-delimiter="${data.customHeadersDelimiter}" \\\n`;
@@ -305,6 +330,34 @@
                     }
 
                     this.bashCommand = command;
+                    // 保存参数到localStorage
+                    this.saveParameters();
+                },
+                
+                // 保存参数到localStorage
+                saveParameters() {
+                    try {
+                        const params = JSON.stringify(this.formData);
+                        localStorage.setItem('cdn_finder_params', params);
+                        console.log('参数已保存到localStorage');
+                    } catch (error) {
+                        console.error('保存参数失败:', error);
+                    }
+                },
+                
+                // 从localStorage加载参数
+                loadParameters() {
+                    try {
+                        const savedParams = localStorage.getItem('cdn_finder_params');
+                        if (savedParams) {
+                            const params = JSON.parse(savedParams);
+                            // 合并保存的参数到当前formData，保持默认值
+                            Object.assign(this.formData, params);
+                            console.log('参数已从localStorage加载');
+                        }
+                    } catch (error) {
+                        console.error('加载参数失败:', error);
+                    }
                 }
             }
         });
