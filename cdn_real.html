@@ -322,13 +322,18 @@
                         command += `      --port=${data.port}\n`;
                         command += `    \n`;
                         command += `    # Extract and append results\n`;
-                        const escapeForShell = s => s.replace(/["$`\\{}]/g, m => `\\${m}`);
-                        let extractCmd = `    cat $zgrab2_output | grep "${escapeForShell(data.searchString)}"`;
+                        const escapeForShell = s => {
+                            // 先进行 JSON 编码，保持 UTF-8，然后去掉首尾双引号
+                            let encoded = JSON.stringify(s).slice(1, -1);
+                            // 对单引号进行 bash 转义：替换为 '\''
+                            return encoded.replace(/'/g, "'\\''");
+                        };
+                        let extractCmd = `    cat $zgrab2_output | grep -F '${escapeForShell(data.searchString)}'`;
                         if (data.enableExclude && data.excludeStrings) {
                             const delimiter = (data.excludeDelimiter && data.excludeDelimiter.length > 0) ? data.excludeDelimiter : '|';
                             const parts = (data.excludeStrings || '').split(delimiter).map(s => s.trim()).filter(s => s.length > 0);
                             if (parts.length > 0) {
-                                const excludeArgs = parts.map(p => `-e "${escapeForShell(p)}"`).join(' ');
+                                const excludeArgs = parts.map(p => `-e '${escapeForShell(p)}'`).join(' ');
                                 extractCmd += ` | grep -Fv ${excludeArgs}`;
                             }
                         }
@@ -388,13 +393,18 @@
                         command += `  --port=${data.port}\n\n`;
 
                         command += `<span style="color: #409EFF"># Step 4: Extract results</span>\n`;
-                        const escapeForShell = s => s.replace(/["$`\\{}]/g, m => `\\${m}`);
-                        let extractCmd = `cat ${zgrab2File} | grep "${escapeForShell(data.searchString)}"`;
+                        const escapeForShell = s => {
+                            // 先进行 JSON 编码，保持 UTF-8，然后去掉首尾双引号
+                            let encoded = JSON.stringify(s).slice(1, -1);
+                            // 对单引号进行 bash 转义：替换为 '\''
+                            return encoded.replace(/'/g, "'\\''");
+                        };
+                        let extractCmd = `cat ${zgrab2File} | grep -F '${escapeForShell(data.searchString)}'`;
                         if (data.enableExclude && data.excludeStrings) {
                             const delimiter = (data.excludeDelimiter && data.excludeDelimiter.length > 0) ? data.excludeDelimiter : '|';
                             const parts = (data.excludeStrings || '').split(delimiter).map(s => s.trim()).filter(s => s.length > 0);
                             if (parts.length > 0) {
-                                const excludeArgs = parts.map(p => `-e "${escapeForShell(p)}"`).join(' ');
+                                const excludeArgs = parts.map(p => `-e '${escapeForShell(p)}'`).join(' ');
                                 extractCmd += ` | grep -Fv ${excludeArgs}`;
                             }
                         }
