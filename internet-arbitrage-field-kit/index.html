@@ -266,7 +266,7 @@
     <div class="actions">
       <a class="button" href="https://github.com/hundan33/hundan33.github.io/raw/main/internet-arbitrage-field-kit/downloads/internet-arbitrage-field-kit.zip">Download full kit</a>
       <a class="button secondary" href="spread-profit-calculator.html">Open calculator</a>
-      <a class="button secondary" href="latest-spread-watch.md">Read latest scan</a>
+      <a class="button secondary" href="latest-polymarket-watch.md">Read Polymarket scan</a>
     </div>
   </section>
 
@@ -295,6 +295,10 @@
           Check seeded GitHub issue URLs for cash-like rewards and filter closed, non-cash, and too-small bounties.
         </div>
         <div class="item">
+          <strong>Prediction-market watch</strong>
+          Check Polymarket public orderbooks for complete-set rows where every outcome appears cheaper than 1.00.
+        </div>
+        <div class="item">
           <strong>Decision checklists</strong>
           Avoid obvious bad-risk deals before spending time, capital, or attention.
         </div>
@@ -316,6 +320,10 @@
           <strong>Funding-rate watch</strong>
           Use fee-recovery math before treating a funding-rate row as a real cash-and-carry candidate.
         </a>
+        <a class="item" href="articles/polymarket-complete-set-watch.html">
+          <strong>Polymarket complete-set watch</strong>
+          Separate executable orderbook sums from displayed probability noise before considering any action.
+        </a>
       </div>
     </section>
 
@@ -326,6 +334,7 @@
         <p>The result was a no-go: no scanned row remained positive after estimated trading fees and transfer/fixed cost. This is the point of the kit: it should stop weak opportunities, not decorate them.</p>
         <p>The funding-rate scan also found no row that met the annualized-rate and fee-recovery filters for a simple spot-long/perp-short setup.</p>
         <p>The GitHub bounty watch checked 10 seed URLs plus 4 GitHub Search queries through the proxy, inspected 20 issue URLs, and found no direct candidate after status and friction filters. The largest cash-like issue was 250,000 sats, about $154.32 at scan time, but it required AIBTC identity and external account setup.</p>
+        <p>The Polymarket complete-set watch fetched 100 active markets through the proxy, generated 93 public CLOB orderbook rows, and found no long-only complete-set edge. The closest rows still had best-ask sums above 1.00.</p>
       </div>
       <div class="stat">
         <div><b>43</b>assets scanned</div>
@@ -334,6 +343,8 @@
         <div><b>0</b>funding candidates</div>
         <div><b>20</b>bounty URLs checked</div>
         <div><b>0</b>bounty candidates</div>
+        <div><b>93</b>Polymarket books</div>
+        <div><b>0</b>complete-set edges</div>
       </div>
     </section>
 

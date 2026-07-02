@@ -12,6 +12,7 @@ Suggested payment: **$19** if useful.
 - [Download the live scan script](scan-crypto-spreads.ps1)
 - [Download the funding-rate scan script](scan-funding-rates.ps1)
 - [Download the GitHub bounty scan script](scan-github-bounties.ps1)
+- [Download the Polymarket complete-set scan script](scan-polymarket-complete-sets.ps1)
 - [Read live scan notes](live-scan-notes.md)
 - [Read latest spread watch report](latest-spread-watch.md)
 - [Download latest spread watch CSV](latest-spread-watch.csv)
@@ -19,9 +20,12 @@ Suggested payment: **$19** if useful.
 - [Download latest funding watch CSV](latest-funding-watch.csv)
 - [Read latest bounty watch report](latest-bounty-watch.md)
 - [Download latest bounty watch CSV](latest-bounty-watch.csv)
+- [Read latest Polymarket watch report](latest-polymarket-watch.md)
+- [Download latest Polymarket watch CSV](latest-polymarket-watch.csv)
 - [Read the GitHub bounty scanner guide](articles/github-bounty-scanner.html)
 - [Read the spread profit calculator guide](articles/spread-profit-calculator.html)
 - [Read the funding-rate watch guide](articles/funding-rate-watch.html)
+- [Read the Polymarket complete-set watch guide](articles/polymarket-complete-set-watch.html)
 - [Read the arbitrage map](internet-arbitrage-map.md)
 - [Read the opportunity radar](opportunity-radar.md)
 - [Read the deal checklist](deal-evaluation-checklist.md)
@@ -94,12 +98,21 @@ Latest GitHub bounty scan:
 - A $100 SecuritySkills issue was skipped because the repository bounty program is marked paused.
 - Closed, non-cash, too-small, paused, and external-account issues were filtered out or watch-listed.
 
+Latest Polymarket complete-set scan:
+
+- 100 active markets fetched through the proxy.
+- 93 orderbook rows generated from public CLOB token books.
+- 0 rows met the long-only complete-set orderbook-edge filter.
+- The closest rows still had best-ask sums above 1.00, so the current action is no-go/watch rather than trade.
+- `Price Sum` is treated only as an indicative clue; `Ask Sum` from orderbooks is the practical filter.
+
 ## Good For
 
 - Digital product pricing.
 - Marketplace fee comparisons.
 - Affiliate/referral ROI checks.
 - Crypto spot spread observation.
+- Prediction-market complete-set observation.
 - GitHub issue bounty triage.
 - API/data packaging ideas.
 - Online-only productized workflows.

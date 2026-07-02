@@ -26,6 +26,7 @@ Use it to check:
 - Crypto spot spreads after estimated fees and transfer costs.
 - Funding-rate opportunities after fee recovery.
 - GitHub issue bounty candidates before spending time on a PR.
+- Prediction-market complete-set rows from public Polymarket orderbooks.
 - Net profit, ROI, and units needed to reach $100.
 
 Suggested payment: **$19** if the kit is useful.
@@ -35,6 +36,7 @@ Suggested payment: **$19** if the kit is useful.
 - [Download the full kit](https://github.com/hundan33/hundan33.github.io/raw/main/internet-arbitrage-field-kit/downloads/internet-arbitrage-field-kit.zip)
 - [Read the latest bounty watch](https://github.com/hundan33/hundan33.github.io/blob/main/internet-arbitrage-field-kit/latest-bounty-watch.md)
 - [Read the latest live spread watch](https://github.com/hundan33/hundan33.github.io/blob/main/internet-arbitrage-field-kit/latest-spread-watch.md)
+- [Read the latest Polymarket complete-set watch](https://github.com/hundan33/hundan33.github.io/blob/main/internet-arbitrage-field-kit/latest-polymarket-watch.md)
 
 ### GitHub Bounty Scanner Mini Kit
 

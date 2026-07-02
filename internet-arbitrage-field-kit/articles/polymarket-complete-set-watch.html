@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Polymarket Complete-Set Watch</title>
+  <meta name="description" content="Use a read-only Polymarket scanner to check whether all outcomes in a prediction market can be bought for less than 1.00 before execution friction.">
+  <style>
+    :root { --ink:#182126; --muted:#53636c; --line:#d8e0df; --paper:#fff; --wash:#f6f8f9; --teal:#08786e; --amber:#b45f06; --blue:#315f9b; }
+    * { box-sizing: border-box; }
+    body { margin:0; font-family:Arial, Helvetica, sans-serif; color:var(--ink); background:var(--wash); line-height:1.55; overflow-x:hidden; }
+    main { max-width:900px; margin:0 auto; padding:36px 20px 56px; }
+    h1 { margin:0; font-size:clamp(34px, 6vw, 60px); line-height:1; letter-spacing:0; }
+    h2 { margin:30px 0 10px; font-size:28px; letter-spacing:0; }
+    p, li { color:var(--muted); }
+    a { color:var(--blue); }
+    .panel { margin:24px 0; padding:18px; background:var(--paper); border:1px solid var(--line); border-radius:8px; }
+    .actions { display:flex; flex-wrap:wrap; gap:10px; margin-top:18px; }
+    .button { display:inline-flex; min-height:42px; align-items:center; justify-content:center; padding:10px 14px; border-radius:8px; border:1px solid var(--line); text-decoration:none; font-weight:700; color:var(--ink); background:#fff; }
+    .button.primary { border-color:var(--teal); background:var(--teal); color:#fff; }
+    code, pre { overflow-wrap:anywhere; background:#eef3f8; color:var(--blue); border-radius:6px; }
+    code { padding:2px 4px; }
+    pre { padding:14px; overflow:auto; }
+  </style>
+</head>
+<body>
+  <main>
+    <p><a href="../">Internet Arbitrage Field Kit</a></p>
+    <h1>Polymarket complete-set watch</h1>
+    <p>Prediction-market prices can look like an arbitrage when the displayed probabilities do not add up neatly. This scanner uses public market data and public orderbooks to check a narrower question: can every mutually exclusive outcome in one market be bought at current best asks for less than 1.00?</p>
+
+    <div class="panel">
+      <strong>Latest included scan</strong>
+      <p>100 fetched markets, 93 orderbook rows generated, 0 orderbook-edge candidates. The closest rows still had best-ask sums above 1.00, so the result was no-go/watch rather than trade.</p>
+      <div class="actions">
+        <a class="button primary" href="../latest-polymarket-watch.md">Read latest report</a>
+        <a class="button" href="../scan-polymarket-complete-sets.ps1">Download scanner</a>
+      </div>
+    </div>
+
+    <h2>Example Command</h2>
+    <pre><code>.\scan-polymarket-complete-sets.ps1 -Proxy http://127.0.0.1:10808 -MaxMarkets 120 -MinLiquidity 250 -MinVolume 500 -MinEdgePerSet 0.005 -MinExecutableEdgeUsd 0.25 -ExportCsv latest-polymarket-watch.csv -ReportPath latest-polymarket-watch.md</code></pre>
+
+    <h2>How To Read A Row</h2>
+    <ul>
+      <li><code>Price Sum</code> is only the displayed market-data sum. It is a clue, not an executable trade.</li>
+      <li><code>Ask Sum</code> is the sum of current best asks from orderbooks. Below 1.00 is the only long-only complete-set condition this scanner treats as a possible edge.</li>
+      <li><code>Top Depth</code> is the smallest best-ask size across outcomes, which limits how much of the displayed edge might be available before prices move.</li>
+      <li><code>Edge At Top</code> is still before fees, slippage, leg risk, settlement risk, and account eligibility checks.</li>
+    </ul>
+
+    <h2>What It Does Not Do</h2>
+    <ul>
+      <li>No orders, signatures, private keys, or fund movement.</li>
+      <li>No attempt to bypass location, account, or platform restrictions.</li>
+      <li>No guarantee all legs can fill atomically.</li>
+      <li>No legal, tax, settlement, or jurisdiction advice.</li>
+    </ul>
+
+    <h2>Sources</h2>
+    <ul>
+      <li><a href="https://docs.polymarket.com/market-data/overview">Polymarket market-data overview</a></li>
+      <li><a href="https://docs.polymarket.com/api-reference/introduction">Polymarket API introduction</a></li>
+      <li><a href="https://docs.polymarket.com/api-reference/market-data/get-order-book">Polymarket get order book API</a></li>
+      <li><a href="https://docs.polymarket.com/api-reference/authentication">Polymarket authentication docs</a></li>
+    </ul>
+  </main>
+</body>
+</html>

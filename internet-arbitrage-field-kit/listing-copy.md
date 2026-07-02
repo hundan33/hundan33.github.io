@@ -20,6 +20,7 @@ Included:
 - Read-only crypto spread scanner with proxy support.
 - Read-only funding-rate scanner with fee-recovery filters.
 - Read-only GitHub bounty scanner with proxy and optional GitHub Search support.
+- Read-only Polymarket complete-set scanner using public Gamma and CLOB orderbook data.
 - Manual transfer-cost and minimum-net filters.
 - Internet arbitrage opportunity map.
 - Opportunity ledger CSV.
@@ -33,6 +34,7 @@ Good for:
 - Marketplace fee comparisons.
 - Affiliate/referral ROI checks.
 - Crypto spread observation.
+- Prediction-market complete-set observation.
 - API/data packaging ideas.
 - GitHub issue bounty search and triage.
 - Online-only productized workflows.
@@ -47,4 +49,4 @@ $19
 
 ## Tags
 
-internet arbitrage, spread calculator, profit calculator, online business templates, digital product tools, fee calculator, ROI calculator, marketplace arbitrage, crypto spread calculator, github bounty scanner, offline HTML tool
+internet arbitrage, spread calculator, profit calculator, online business templates, digital product tools, fee calculator, ROI calculator, marketplace arbitrage, crypto spread calculator, github bounty scanner, polymarket scanner, prediction market arbitrage, offline HTML tool
