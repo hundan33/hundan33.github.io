@@ -45,8 +45,10 @@ Use it to check:
 Suggested payment: **$19** if useful.
 
 - [Open the arbitrage kit listing](internet-arbitrage-field-kit/)
+- [Preview the arbitrage calculator online](https://htmlpreview.github.io/?https://github.com/hundan33/hundan33.github.io/blob/main/internet-arbitrage-field-kit/spread-profit-calculator.html)
 - [Download the arbitrage kit](https://github.com/hundan33/hundan33.github.io/raw/main/internet-arbitrage-field-kit/downloads/internet-arbitrage-field-kit.zip)
 - [Read the arbitrage map](internet-arbitrage-field-kit/internet-arbitrage-map.md)
+- [Read the latest live spread watch](internet-arbitrage-field-kit/latest-spread-watch.md)
 
 ## Pay Or Support
 

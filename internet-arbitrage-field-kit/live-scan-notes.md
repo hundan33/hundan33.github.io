@@ -36,6 +36,12 @@ Export CSV and Markdown report:
 .\scan-crypto-spreads.ps1 -Proxy http://127.0.0.1:10808 -ExportCsv latest-spread-watch.csv -ReportPath latest-spread-watch.md
 ```
 
+Stricter scan with a manual transfer/fixed-cost estimate and USDT-only venues:
+
+```powershell
+.\scan-crypto-spreads.ps1 -Proxy http://127.0.0.1:10808 -TransferCostUsd 0.25 -MinNetUsd 0.25 -StrictUsdtOnly -ExportCsv latest-spread-watch.csv -ReportPath latest-spread-watch.md
+```
+
 ## What It Calculates
 
 - Best observed buy ask.
@@ -43,11 +49,13 @@ Export CSV and Markdown report:
 - Raw spread.
 - Raw spread percentage.
 - Estimated fee cost.
-- Estimated net spread on a chosen trade size.
+- Manual transfer/fixed-cost estimate.
+- Estimated net spread after trading fees and transfer/fixed cost.
+- Estimated cycles needed to reach $100 when a row remains positive.
 
 ## What It Does Not Include
 
-- Withdrawal fees.
+- Live withdrawal-fee lookup.
 - Deposit delays.
 - KYC/account limits.
 - Liquidity beyond top of book.

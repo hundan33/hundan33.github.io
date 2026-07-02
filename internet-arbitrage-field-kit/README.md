@@ -6,6 +6,7 @@ Suggested payment: **$19** if useful.
 
 ## Download
 
+- [Preview the calculator online](https://htmlpreview.github.io/?https://github.com/hundan33/hundan33.github.io/blob/main/internet-arbitrage-field-kit/spread-profit-calculator.html)
 - [Download the full kit](https://github.com/hundan33/hundan33.github.io/raw/main/internet-arbitrage-field-kit/downloads/internet-arbitrage-field-kit.zip)
 - [Open the calculator file](spread-profit-calculator.html)
 - [Download the live scan script](scan-crypto-spreads.ps1)
@@ -26,6 +27,8 @@ EVM address:
 
 Crypto transfers are irreversible. Confirm chain and token before sending.
 
+If the online preview is unavailable, download the zip and open `spread-profit-calculator.html` locally.
+
 ## What It Helps With
 
 Raw spreads can be misleading. A deal that looks profitable can fail after:
@@ -40,10 +43,16 @@ Raw spreads can be misleading. A deal that looks profitable can fail after:
 
 The calculator helps you estimate net profit, ROI, break-even price, and units needed to reach a target like $100.
 
-The optional PowerShell scanner can read public ticker APIs through a local proxy and compare observed BTC/ETH/SOL spot prices across Binance, OKX, KuCoin, and Coinbase:
+The optional PowerShell scanner can read public ticker APIs through a local proxy and compare observed spot prices across Binance, OKX, KuCoin, and Coinbase:
 
 ```powershell
 .\scan-crypto-spreads.ps1 -Proxy http://127.0.0.1:10808
+```
+
+For a stricter USDT-only scan with a manual fixed transfer-cost estimate:
+
+```powershell
+.\scan-crypto-spreads.ps1 -Proxy http://127.0.0.1:10808 -TransferCostUsd 0.25 -MinNetUsd 0.25 -StrictUsdtOnly -ExportCsv latest-spread-watch.csv -ReportPath latest-spread-watch.md
 ```
 
 It is observational only. It does not place trades.
@@ -51,8 +60,12 @@ It is observational only. It does not place trades.
 Latest published scan:
 
 - 12 assets scanned.
-- 1 row was positive after estimated trading fees only: TRX Coinbase to OKX.
-- The report still marks it as observational because withdrawal fees, transfer delays, USD/USDT basis, account limits, and execution risk are not included.
+- Strict USDT-only mode enabled.
+- Assumed trade size: $100.
+- Assumed fee: 0.1% per side.
+- Assumed transfer/fixed cost: $0.25.
+- 0 rows remained positive after estimated trading fees and transfer/fixed cost.
+- Best rows were still negative after costs, so the current action is no-go/watch rather than trade.
 
 ## Good For
 

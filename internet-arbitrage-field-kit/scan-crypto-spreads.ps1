@@ -2,8 +2,11 @@ param(
     [string]$Proxy = "",
     [decimal]$TradeUsd = 100,
     [decimal]$FeePercentPerSide = 0.1,
+    [decimal]$TransferCostUsd = 0,
+    [decimal]$MinNetUsd = 0.25,
     [string[]]$Assets = @("BTC", "ETH", "SOL", "XRP", "DOGE", "ADA", "AVAX", "LINK", "LTC", "BCH", "DOT", "TRX"),
     [int]$TimeoutSec = 20,
+    [switch]$StrictUsdtOnly,
     [string]$ExportCsv = "",
     [string]$ReportPath = ""
 )
@@ -119,7 +122,9 @@ foreach ($asset in $Assets) {
     Get-BinanceQuote $asset $quotes $warnings
     Get-OkxQuote $asset $quotes $warnings
     Get-KuCoinQuote $asset $quotes $warnings
-    Get-CoinbaseQuote $asset $quotes $warnings
+    if (-not $StrictUsdtOnly) {
+        Get-CoinbaseQuote $asset $quotes $warnings
+    }
 }
 
 $feeRoundTrip = ($FeePercentPerSide * 2) / 100
@@ -138,7 +143,15 @@ foreach ($asset in $Assets) {
     $estimatedFeeUsd = $TradeUsd * $feeRoundTrip
     $grossSpreadUsd = if ($bestBuy.Ask -gt 0) { $TradeUsd * ($rawSpread / $bestBuy.Ask) } else { 0 }
     $netSpreadUsd = $grossSpreadUsd - $estimatedFeeUsd
-    $decision = if ($netSpreadUsd -gt 0) { "WATCH SMALL" } else { "NO-GO AFTER FEES" }
+    $netAfterTransferUsd = $netSpreadUsd - $TransferCostUsd
+    $cyclesTo100 = if ($netAfterTransferUsd -gt 0) { [int][Math]::Ceiling(100 / $netAfterTransferUsd) } else { $null }
+    $decision = if ($netAfterTransferUsd -ge $MinNetUsd) {
+        "POSSIBLE AFTER COSTS"
+    } elseif ($netAfterTransferUsd -gt 0) {
+        "WATCH TOO SMALL"
+    } else {
+        "NO-GO AFTER COSTS"
+    }
 
     $results.Add([PSCustomObject]@{
         Asset = $asset
@@ -151,6 +164,9 @@ foreach ($asset in $Assets) {
         GrossSpreadUsd = [Math]::Round($grossSpreadUsd, 4)
         EstimatedFeesUsd = [Math]::Round($estimatedFeeUsd, 4)
         NetSpreadUsd = [Math]::Round($netSpreadUsd, 4)
+        TransferCostUsd = [Math]::Round($TransferCostUsd, 4)
+        NetAfterTransferUsd = [Math]::Round($netAfterTransferUsd, 4)
+        CyclesTo100 = $cyclesTo100
         Decision = $decision
     })
 }
@@ -158,6 +174,11 @@ foreach ($asset in $Assets) {
 Write-Host "Crypto Spread Scan"
 Write-Host ("Trade size: `${0:N2}" -f $TradeUsd)
 Write-Host ("Assumed fee per side: {0:N4}%" -f $FeePercentPerSide)
+Write-Host ("Assumed transfer/fixed cost: `${0:N4}" -f $TransferCostUsd)
+Write-Host ("Minimum useful net after costs: `${0:N4}" -f $MinNetUsd)
+if ($StrictUsdtOnly) {
+    Write-Host "Strict USDT-only mode: enabled"
+}
 if (-not [string]::IsNullOrWhiteSpace($Proxy)) {
     Write-Host "Proxy: $Proxy"
 }
@@ -182,7 +203,7 @@ if ($warnings.Count -gt 0) {
 }
 
 Write-Host ""
-Write-Host "Important: This scan is observational. It does not include withdrawal fees, deposit delays, KYC limits, liquidity depth beyond top of book, USD/USDT basis risk, taxes, or execution risk."
+Write-Host "Important: This scan is observational. Transfer/fixed cost is a manual estimate. It does not verify withdrawal availability, deposit delays, KYC limits, liquidity depth beyond top of book, USD/USDT basis risk, taxes, or execution risk."
 
 if (-not [string]::IsNullOrWhiteSpace($ExportCsv)) {
     $results | Export-Csv -LiteralPath $ExportCsv -NoTypeInformation -Encoding UTF8
@@ -192,8 +213,9 @@ if (-not [string]::IsNullOrWhiteSpace($ExportCsv)) {
 }
 
 if (-not [string]::IsNullOrWhiteSpace($ReportPath)) {
-    $sorted = @($results | Sort-Object NetSpreadUsd -Descending)
-    $positive = @($sorted | Where-Object { $_.NetSpreadUsd -gt 0 })
+    $sorted = @($results | Sort-Object NetAfterTransferUsd -Descending)
+    $positive = @($sorted | Where-Object { $_.NetAfterTransferUsd -gt 0 })
+    $meetsThreshold = @($sorted | Where-Object { $_.NetAfterTransferUsd -ge $MinNetUsd })
     $lines = New-Object System.Collections.Generic.List[string]
 
     $lines.Add("# Crypto Spread Watch")
@@ -202,6 +224,9 @@ if (-not [string]::IsNullOrWhiteSpace($ReportPath)) {
     $lines.Add("")
     $lines.Add(("Trade size: `${0:N2}" -f $TradeUsd))
     $lines.Add(("Assumed fee per side: {0:N4}%" -f $FeePercentPerSide))
+    $lines.Add(("Assumed transfer/fixed cost: `${0:N4}" -f $TransferCostUsd))
+    $lines.Add(("Minimum useful net after costs: `${0:N4}" -f $MinNetUsd))
+    $lines.Add(("Strict USDT-only mode: {0}" -f $StrictUsdtOnly.IsPresent))
     if (-not [string]::IsNullOrWhiteSpace($Proxy)) {
         $lines.Add(("Proxy: {0}" -f $Proxy))
     }
@@ -210,21 +235,26 @@ if (-not [string]::IsNullOrWhiteSpace($ReportPath)) {
     $lines.Add("")
     $lines.Add(("Assets scanned: {0}" -f ($Assets -join ", ")))
     $lines.Add(("Rows generated: {0}" -f $results.Count))
-    $lines.Add(("Positive after estimated fees: {0}" -f $positive.Count))
+    $lines.Add(("Positive after estimated fees and transfer/fixed cost: {0}" -f $positive.Count))
+    $lines.Add(("Rows meeting minimum useful net: {0}" -f $meetsThreshold.Count))
     $lines.Add("")
 
     if ($positive.Count -eq 0) {
-        $lines.Add("No scanned asset remained positive after the estimated round-trip trading fees.")
+        $lines.Add("No scanned asset remained positive after the estimated round-trip trading fees and transfer/fixed cost.")
+        $lines.Add("")
+    } elseif ($meetsThreshold.Count -eq 0) {
+        $lines.Add("At least one row remained barely positive, but none met the minimum useful net threshold.")
         $lines.Add("")
     }
 
     $lines.Add("## Top Rows")
     $lines.Add("")
-    $lines.Add("| Asset | Buy | Ask | Sell | Bid | Raw Spread % | Gross $ | Fees $ | Net $ | Decision |")
-    $lines.Add("| --- | --- | ---: | --- | ---: | ---: | ---: | ---: | ---: | --- |")
+    $lines.Add("| Asset | Buy | Ask | Sell | Bid | Raw Spread % | Gross $ | Fees $ | Transfer $ | Net After Costs $ | Cycles To `$100 | Decision |")
+    $lines.Add("| --- | --- | ---: | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- |")
 
     foreach ($row in ($sorted | Select-Object -First 20)) {
-        $lines.Add(("| {0} | {1} | {2} | {3} | {4} | {5}% | `${6} | `${7} | `${8} | {9} |" -f $row.Asset, $row.BuyVenue, $row.BuyAsk, $row.SellVenue, $row.SellBid, $row.RawSpreadPct, $row.GrossSpreadUsd, $row.EstimatedFeesUsd, $row.NetSpreadUsd, $row.Decision))
+        $cycles = if ($null -ne $row.CyclesTo100) { $row.CyclesTo100 } else { "" }
+        $lines.Add(("| {0} | {1} | {2} | {3} | {4} | {5}% | `${6} | `${7} | `${8} | `${9} | {10} | {11} |" -f $row.Asset, $row.BuyVenue, $row.BuyAsk, $row.SellVenue, $row.SellBid, $row.RawSpreadPct, $row.GrossSpreadUsd, $row.EstimatedFeesUsd, $row.TransferCostUsd, $row.NetAfterTransferUsd, $cycles, $row.Decision))
     }
 
     $lines.Add("")
@@ -241,7 +271,7 @@ if (-not [string]::IsNullOrWhiteSpace($ReportPath)) {
     $lines.Add("")
     $lines.Add("## Important")
     $lines.Add("")
-    $lines.Add("This report is observational. It does not include withdrawal fees, deposit delays, KYC limits, liquidity depth beyond top of book, USD/USDT basis risk, taxes, or execution risk. Do not trade just because a raw spread looks positive.")
+    $lines.Add("This report is observational. Transfer/fixed cost is a manual estimate, not a live withdrawal-fee lookup. It does not verify withdrawal availability, deposit delays, KYC limits, liquidity depth beyond top of book, USD/USDT basis risk, taxes, or execution risk. Do not trade just because a raw spread looks positive.")
 
     Set-Content -LiteralPath $ReportPath -Value $lines -Encoding UTF8
     Write-Host ""

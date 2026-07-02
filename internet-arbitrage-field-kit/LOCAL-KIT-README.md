@@ -9,7 +9,7 @@ It does not place trades, move funds, use private keys, or guarantee profit. It 
 ## Files
 
 - `spread-profit-calculator.html` - offline calculator for price spread, fees, slippage, ROI, and units needed to reach $100.
-- `scan-crypto-spreads.ps1` - optional read-only crypto spot spread scanner using public ticker APIs.
+- `scan-crypto-spreads.ps1` - optional read-only crypto spot spread scanner using public ticker APIs, manual transfer-cost estimates, and minimum-net filters.
 - `internet-arbitrage-map.md` - low-complexity online arbitrage categories and what to avoid.
 - `opportunity-radar.md` - prioritized opportunity paths by complexity, blocker, and fit.
 - `opportunity-ledger.csv` - spreadsheet-style log for tracking opportunities and results.
@@ -43,6 +43,12 @@ If public APIs are reachable, run:
 
 ```powershell
 .\scan-crypto-spreads.ps1 -Proxy http://127.0.0.1:10808
+```
+
+For a stricter USDT-only scan with an assumed fixed transfer cost:
+
+```powershell
+.\scan-crypto-spreads.ps1 -Proxy http://127.0.0.1:10808 -TransferCostUsd 0.25 -MinNetUsd 0.25 -StrictUsdtOnly -ExportCsv latest-spread-watch.csv -ReportPath latest-spread-watch.md
 ```
 
 The scan is observational only. It does not place trades or move funds.
