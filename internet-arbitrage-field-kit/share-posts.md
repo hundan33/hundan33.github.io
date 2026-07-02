@@ -6,6 +6,7 @@
 4. If a deal only works before fees, it does not work. This kit helps calculate the real number.
 5. Useful for digital product pricing, marketplace fee comparisons, affiliate ROI checks, and crypto spread observation.
 6. No trading bot. No private keys. No promises. Just a calculator and checklist for online spread math.
+7. Added a read-only GitHub bounty watch script too. It filters closed, non-cash, and too-small issue rewards before spending time on a PR.
 
 Main link:
 

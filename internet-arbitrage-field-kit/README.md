@@ -11,11 +11,14 @@ Suggested payment: **$19** if useful.
 - [Open the calculator file](spread-profit-calculator.html)
 - [Download the live scan script](scan-crypto-spreads.ps1)
 - [Download the funding-rate scan script](scan-funding-rates.ps1)
+- [Download the GitHub bounty scan script](scan-github-bounties.ps1)
 - [Read live scan notes](live-scan-notes.md)
 - [Read latest spread watch report](latest-spread-watch.md)
 - [Download latest spread watch CSV](latest-spread-watch.csv)
 - [Read latest funding watch report](latest-funding-watch.md)
 - [Download latest funding watch CSV](latest-funding-watch.csv)
+- [Read latest bounty watch report](latest-bounty-watch.md)
+- [Download latest bounty watch CSV](latest-bounty-watch.csv)
 - [Read the arbitrage map](internet-arbitrage-map.md)
 - [Read the opportunity radar](opportunity-radar.md)
 - [Read the deal checklist](deal-evaluation-checklist.md)
@@ -79,12 +82,20 @@ Latest funding-rate scan:
 - 0 rows met the annualized-rate and fee-recovery filters.
 - The strongest observed row was BNB on Binance Futures at about 11.93% annualized, but it still needed about 37 funding intervals to cover estimated entry/exit fees at the default assumptions.
 
+Latest GitHub bounty scan:
+
+- 6 seeded public issue URLs checked through the proxy.
+- 0 rows met the $10 minimum candidate filter.
+- The largest open cash-like issue was 35 XLM, about $6.99 at scan time.
+- Closed, non-cash, and too-small issues were filtered out.
+
 ## Good For
 
 - Digital product pricing.
 - Marketplace fee comparisons.
 - Affiliate/referral ROI checks.
 - Crypto spot spread observation.
+- GitHub issue bounty triage.
 - API/data packaging ideas.
 - Online-only productized workflows.
 

@@ -260,7 +260,7 @@
 </head>
 <body>
   <section class="hero">
-    <p class="eyebrow">Offline calculator, scanner, and checklists</p>
+    <p class="eyebrow">Offline calculator, scanners, and checklists</p>
     <h1>Internet Arbitrage Field Kit</h1>
     <p>Check whether an online spread survives fees, slippage, transfers, and execution risk.</p>
     <div class="actions">
@@ -291,6 +291,10 @@
           Read public spot ticker APIs through a proxy and compare observed USDT prices across multiple venues.
         </div>
         <div class="item">
+          <strong>Bounty watch scanner</strong>
+          Check seeded GitHub issue URLs for cash-like rewards and filter closed, non-cash, and too-small bounties.
+        </div>
+        <div class="item">
           <strong>Decision checklists</strong>
           Avoid obvious bad-risk deals before spending time, capital, or attention.
         </div>
@@ -299,16 +303,19 @@
 
     <section class="section scan">
       <div>
-        <h2>Latest live scan</h2>
+        <h2>Latest live scans</h2>
         <p>The latest included report scanned a wider list of common USDT pairs with strict USDT-only mode, a $100 trade size, 0.1% assumed fee per side, and a $0.25 manual transfer/fixed-cost estimate.</p>
         <p>The result was a no-go: no scanned row remained positive after estimated trading fees and transfer/fixed cost. This is the point of the kit: it should stop weak opportunities, not decorate them.</p>
         <p>The funding-rate scan also found no row that met the annualized-rate and fee-recovery filters for a simple spot-long/perp-short setup.</p>
+        <p>The GitHub bounty watch checked 6 seeded issue URLs through the proxy and found no candidate above the $10 minimum filter. The largest open cash-like issue was 35 XLM, about $6.99 at scan time.</p>
       </div>
       <div class="stat">
         <div><b>43</b>assets scanned</div>
         <div><b>42</b>usable rows</div>
         <div><b>0</b>positive after costs</div>
         <div><b>0</b>funding candidates</div>
+        <div><b>6</b>bounty URLs checked</div>
+        <div><b>0</b>bounty candidates</div>
       </div>
     </section>
 

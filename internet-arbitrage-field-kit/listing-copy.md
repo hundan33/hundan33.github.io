@@ -19,6 +19,7 @@ Included:
 - Offline spread profit calculator.
 - Read-only crypto spread scanner with proxy support.
 - Read-only funding-rate scanner with fee-recovery filters.
+- Read-only GitHub bounty scanner with proxy support.
 - Manual transfer-cost and minimum-net filters.
 - Internet arbitrage opportunity map.
 - Opportunity ledger CSV.
@@ -33,6 +34,7 @@ Good for:
 - Affiliate/referral ROI checks.
 - Crypto spread observation.
 - API/data packaging ideas.
+- GitHub issue bounty triage.
 - Online-only productized workflows.
 
 Important:
@@ -45,4 +47,4 @@ $19
 
 ## Tags
 
-internet arbitrage, spread calculator, profit calculator, online business templates, digital product tools, fee calculator, ROI calculator, marketplace arbitrage, crypto spread calculator, offline HTML tool
+internet arbitrage, spread calculator, profit calculator, online business templates, digital product tools, fee calculator, ROI calculator, marketplace arbitrage, crypto spread calculator, github bounty scanner, offline HTML tool
