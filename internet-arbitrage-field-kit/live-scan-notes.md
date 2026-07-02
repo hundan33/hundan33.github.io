@@ -9,10 +9,31 @@ Current supported sources:
 - KuCoin level 1 order book.
 - Coinbase spot price.
 
+Default assets:
+
+- BTC
+- ETH
+- SOL
+- XRP
+- DOGE
+- ADA
+- AVAX
+- LINK
+- LTC
+- BCH
+- DOT
+- TRX
+
 Use a proxy if direct access is blocked:
 
 ```powershell
 .\scan-crypto-spreads.ps1 -Proxy http://127.0.0.1:10808
+```
+
+Export CSV and Markdown report:
+
+```powershell
+.\scan-crypto-spreads.ps1 -Proxy http://127.0.0.1:10808 -ExportCsv latest-spread-watch.csv -ReportPath latest-spread-watch.md
 ```
 
 ## What It Calculates

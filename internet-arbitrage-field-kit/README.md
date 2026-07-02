@@ -10,6 +10,8 @@ Suggested payment: **$19** if useful.
 - [Open the calculator file](spread-profit-calculator.html)
 - [Download the live scan script](scan-crypto-spreads.ps1)
 - [Read live scan notes](live-scan-notes.md)
+- [Read latest spread watch report](latest-spread-watch.md)
+- [Download latest spread watch CSV](latest-spread-watch.csv)
 - [Read the arbitrage map](internet-arbitrage-map.md)
 - [Read the opportunity radar](opportunity-radar.md)
 - [Read the deal checklist](deal-evaluation-checklist.md)
@@ -45,6 +47,12 @@ The optional PowerShell scanner can read public ticker APIs through a local prox
 ```
 
 It is observational only. It does not place trades.
+
+Latest published scan:
+
+- 12 assets scanned.
+- 1 row was positive after estimated trading fees only: TRX Coinbase to OKX.
+- The report still marks it as observational because withdrawal fees, transfer delays, USD/USDT basis, account limits, and execution risk are not included.
 
 ## Good For
 

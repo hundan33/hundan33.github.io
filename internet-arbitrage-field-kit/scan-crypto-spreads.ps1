@@ -2,8 +2,10 @@ param(
     [string]$Proxy = "",
     [decimal]$TradeUsd = 100,
     [decimal]$FeePercentPerSide = 0.1,
-    [string[]]$Assets = @("BTC", "ETH", "SOL"),
-    [int]$TimeoutSec = 20
+    [string[]]$Assets = @("BTC", "ETH", "SOL", "XRP", "DOGE", "ADA", "AVAX", "LINK", "LTC", "BCH", "DOT", "TRX"),
+    [int]$TimeoutSec = 20,
+    [string]$ExportCsv = "",
+    [string]$ReportPath = ""
 )
 
 $ErrorActionPreference = "Stop"
@@ -111,6 +113,7 @@ function Get-CoinbaseQuote {
 $quotes = New-Object System.Collections.Generic.List[object]
 $warnings = New-Object System.Collections.Generic.List[string]
 $results = New-Object System.Collections.Generic.List[object]
+$scanStarted = Get-Date
 
 foreach ($asset in $Assets) {
     Get-BinanceQuote $asset $quotes $warnings
@@ -180,3 +183,68 @@ if ($warnings.Count -gt 0) {
 
 Write-Host ""
 Write-Host "Important: This scan is observational. It does not include withdrawal fees, deposit delays, KYC limits, liquidity depth beyond top of book, USD/USDT basis risk, taxes, or execution risk."
+
+if (-not [string]::IsNullOrWhiteSpace($ExportCsv)) {
+    $results | Export-Csv -LiteralPath $ExportCsv -NoTypeInformation -Encoding UTF8
+    Write-Host ""
+    Write-Host "Exported CSV:"
+    Write-Host (Resolve-Path -LiteralPath $ExportCsv)
+}
+
+if (-not [string]::IsNullOrWhiteSpace($ReportPath)) {
+    $sorted = @($results | Sort-Object NetSpreadUsd -Descending)
+    $positive = @($sorted | Where-Object { $_.NetSpreadUsd -gt 0 })
+    $lines = New-Object System.Collections.Generic.List[string]
+
+    $lines.Add("# Crypto Spread Watch")
+    $lines.Add("")
+    $lines.Add(("Scan time: {0}" -f $scanStarted.ToString("yyyy-MM-dd HH:mm:ss zzz")))
+    $lines.Add("")
+    $lines.Add(("Trade size: `${0:N2}" -f $TradeUsd))
+    $lines.Add(("Assumed fee per side: {0:N4}%" -f $FeePercentPerSide))
+    if (-not [string]::IsNullOrWhiteSpace($Proxy)) {
+        $lines.Add(("Proxy: {0}" -f $Proxy))
+    }
+    $lines.Add("")
+    $lines.Add("## Summary")
+    $lines.Add("")
+    $lines.Add(("Assets scanned: {0}" -f ($Assets -join ", ")))
+    $lines.Add(("Rows generated: {0}" -f $results.Count))
+    $lines.Add(("Positive after estimated fees: {0}" -f $positive.Count))
+    $lines.Add("")
+
+    if ($positive.Count -eq 0) {
+        $lines.Add("No scanned asset remained positive after the estimated round-trip trading fees.")
+        $lines.Add("")
+    }
+
+    $lines.Add("## Top Rows")
+    $lines.Add("")
+    $lines.Add("| Asset | Buy | Ask | Sell | Bid | Raw Spread % | Gross $ | Fees $ | Net $ | Decision |")
+    $lines.Add("| --- | --- | ---: | --- | ---: | ---: | ---: | ---: | ---: | --- |")
+
+    foreach ($row in ($sorted | Select-Object -First 20)) {
+        $lines.Add(("| {0} | {1} | {2} | {3} | {4} | {5}% | `${6} | `${7} | `${8} | {9} |" -f $row.Asset, $row.BuyVenue, $row.BuyAsk, $row.SellVenue, $row.SellBid, $row.RawSpreadPct, $row.GrossSpreadUsd, $row.EstimatedFeesUsd, $row.NetSpreadUsd, $row.Decision))
+    }
+
+    $lines.Add("")
+    $lines.Add("## Warnings")
+    $lines.Add("")
+    if ($warnings.Count -gt 0) {
+        foreach ($warning in $warnings) {
+            $lines.Add("- $warning")
+        }
+    } else {
+        $lines.Add("- No API warnings.")
+    }
+
+    $lines.Add("")
+    $lines.Add("## Important")
+    $lines.Add("")
+    $lines.Add("This report is observational. It does not include withdrawal fees, deposit delays, KYC limits, liquidity depth beyond top of book, USD/USDT basis risk, taxes, or execution risk. Do not trade just because a raw spread looks positive.")
+
+    Set-Content -LiteralPath $ReportPath -Value $lines -Encoding UTF8
+    Write-Host ""
+    Write-Host "Exported report:"
+    Write-Host (Resolve-Path -LiteralPath $ReportPath)
+}
