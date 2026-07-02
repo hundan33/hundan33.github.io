@@ -30,6 +30,24 @@ Suggested payment: **$39** if the toolkit is useful.
 - [Download the free sample](https://github.com/hundan33/hundan33.github.io/raw/main/online-seller-mini-toolkit/downloads/online-seller-mini-toolkit-free-sample.zip)
 - [See free customer reply templates](online-seller-mini-toolkit/free-customer-reply-templates.md)
 
+### Internet Arbitrage Field Kit
+
+Offline calculator and checklist kit for evaluating online price spreads after fees.
+
+Use it to check:
+
+- Buy/sell spread.
+- Platform and payment fees.
+- Transfer/network fees.
+- Slippage and reserves.
+- Net profit, ROI, and units needed to reach $100.
+
+Suggested payment: **$19** if useful.
+
+- [Open the arbitrage kit listing](internet-arbitrage-field-kit/)
+- [Download the arbitrage kit](https://github.com/hundan33/hundan33.github.io/raw/main/internet-arbitrage-field-kit/downloads/internet-arbitrage-field-kit.zip)
+- [Read the arbitrage map](internet-arbitrage-field-kit/internet-arbitrage-map.md)
+
 ## Pay Or Support
 
 EVM address:

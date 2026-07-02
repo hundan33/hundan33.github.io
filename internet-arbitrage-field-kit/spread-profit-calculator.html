@@ -1,0 +1,488 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Spread Profit Calculator</title>
+  <style>
+    :root {
+      --bg: #f5f6f0;
+      --paper: #ffffff;
+      --ink: #1f262a;
+      --muted: #65727a;
+      --line: #d7ddd1;
+      --accent: #0f6f63;
+      --danger: #a63f32;
+      --soft: #e8f5f2;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.45;
+    }
+
+    main {
+      width: min(1180px, calc(100% - 28px));
+      margin: 0 auto;
+      padding: 28px 0 44px;
+    }
+
+    header {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 16px;
+      align-items: end;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 18px;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      margin: 0 0 6px;
+      font-size: clamp(32px, 6vw, 58px);
+      line-height: 1;
+      letter-spacing: 0;
+    }
+
+    h2 {
+      margin: 0 0 12px;
+      font-size: 22px;
+    }
+
+    p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 16px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 410px 1fr;
+      gap: 14px;
+      align-items: start;
+    }
+
+    .panel {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 16px;
+    }
+
+    label {
+      display: block;
+      margin: 11px 0 5px;
+      font-weight: 700;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 10px;
+      font: inherit;
+      color: var(--ink);
+      background: white;
+    }
+
+    textarea {
+      min-height: 74px;
+      resize: vertical;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+
+    button {
+      min-height: 42px;
+      border: 1px solid var(--accent);
+      border-radius: 6px;
+      background: var(--accent);
+      color: white;
+      padding: 10px 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    button.secondary {
+      color: var(--accent);
+      background: white;
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .metric {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px;
+      background: var(--soft);
+      color: var(--muted);
+    }
+
+    .metric strong {
+      display: block;
+      color: var(--accent);
+      font-size: 28px;
+      line-height: 1.1;
+    }
+
+    .metric.danger strong { color: var(--danger); }
+
+    .output {
+      white-space: pre-wrap;
+      background: #fbfcf8;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px;
+      min-height: 300px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+      font-size: 14px;
+    }
+
+    th, td {
+      border-bottom: 1px solid var(--line);
+      padding: 8px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th { color: var(--muted); }
+
+    @media (max-width: 920px) {
+      header, .grid, .row, .metrics {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <div>
+        <h1>Spread Profit Calculator</h1>
+        <p>Check whether an online price spread survives fees, transfer costs, slippage, and other hidden costs.</p>
+      </div>
+      <p>Offline. No account. No private keys.</p>
+    </header>
+
+    <section class="grid">
+      <form class="panel" id="calcForm">
+        <h2>Opportunity</h2>
+        <label for="name">Name</label>
+        <input id="name" value="Online seller toolkit bundle">
+
+        <div class="row">
+          <div>
+            <label for="type">Type</label>
+            <select id="type">
+              <option>digital product</option>
+              <option>marketplace spread</option>
+              <option>affiliate ROI</option>
+              <option>crypto spot spread</option>
+              <option>API/data packaging</option>
+              <option>other</option>
+            </select>
+          </div>
+          <div>
+            <label for="goal">Goal USD</label>
+            <input id="goal" type="number" value="100" min="1" step="1">
+          </div>
+        </div>
+
+        <div class="row">
+          <div>
+            <label for="buyMarket">Buy/Source Market</label>
+            <input id="buyMarket" value="own files">
+          </div>
+          <div>
+            <label for="sellMarket">Sell Market</label>
+            <input id="sellMarket" value="public listing">
+          </div>
+        </div>
+
+        <div class="row">
+          <div>
+            <label for="buyCost">Buy Cost Per Unit</label>
+            <input id="buyCost" type="number" value="0" min="0" step="0.01">
+          </div>
+          <div>
+            <label for="sellPrice">Sell Price Per Unit</label>
+            <input id="sellPrice" type="number" value="39" min="0" step="0.01">
+          </div>
+        </div>
+
+        <div class="row">
+          <div>
+            <label for="quantity">Quantity</label>
+            <input id="quantity" type="number" value="3" min="0" step="0.0001">
+          </div>
+          <div>
+            <label for="slippage">Slippage %</label>
+            <input id="slippage" type="number" value="0" min="0" step="0.01">
+          </div>
+        </div>
+
+        <div class="row">
+          <div>
+            <label for="platformFee">Platform Fee %</label>
+            <input id="platformFee" type="number" value="0" min="0" step="0.01">
+          </div>
+          <div>
+            <label for="paymentFee">Payment Fee %</label>
+            <input id="paymentFee" type="number" value="0" min="0" step="0.01">
+          </div>
+        </div>
+
+        <div class="row">
+          <div>
+            <label for="fixedFee">Fixed Fee Per Unit</label>
+            <input id="fixedFee" type="number" value="0" min="0" step="0.01">
+          </div>
+          <div>
+            <label for="transferFee">Transfer/Network Fee</label>
+            <input id="transferFee" type="number" value="0" min="0" step="0.01">
+          </div>
+        </div>
+
+        <div class="row">
+          <div>
+            <label for="otherCost">Other Cost</label>
+            <input id="otherCost" type="number" value="0" min="0" step="0.01">
+          </div>
+          <div>
+            <label for="reserve">Refund/Support Reserve %</label>
+            <input id="reserve" type="number" value="0" min="0" step="0.01">
+          </div>
+        </div>
+
+        <label for="notes">Notes</label>
+        <textarea id="notes">Check rights, rules, fees, and delivery before acting.</textarea>
+
+        <div class="actions">
+          <button type="submit">Calculate</button>
+          <button class="secondary" type="button" id="saveBtn">Save Row</button>
+          <button class="secondary" type="button" id="copyBtn">Copy Summary</button>
+          <button class="secondary" type="button" id="clearBtn">Clear Saved</button>
+        </div>
+      </form>
+
+      <section>
+        <div class="metrics" id="metrics"></div>
+        <div class="panel">
+          <h2>Decision Summary</h2>
+          <div class="output" id="summary"></div>
+        </div>
+        <div class="panel" style="margin-top:14px">
+          <h2>Saved Opportunities</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Net</th>
+                <th>ROI</th>
+                <th>Decision</th>
+              </tr>
+            </thead>
+            <tbody id="savedRows"></tbody>
+          </table>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <script>
+    const ids = [
+      "name", "type", "goal", "buyMarket", "sellMarket", "buyCost", "sellPrice",
+      "quantity", "slippage", "platformFee", "paymentFee", "fixedFee",
+      "transferFee", "otherCost", "reserve", "notes"
+    ];
+
+    const form = document.getElementById("calcForm");
+    const metrics = document.getElementById("metrics");
+    const summary = document.getElementById("summary");
+    const savedRows = document.getElementById("savedRows");
+    const saveBtn = document.getElementById("saveBtn");
+    const copyBtn = document.getElementById("copyBtn");
+    const clearBtn = document.getElementById("clearBtn");
+
+    function value(id) {
+      return document.getElementById(id).value.trim();
+    }
+
+    function num(id) {
+      return Number(value(id)) || 0;
+    }
+
+    function money(value) {
+      return `$${value.toFixed(2)}`;
+    }
+
+    function pct(value) {
+      if (!Number.isFinite(value)) return "0.00%";
+      return `${value.toFixed(2)}%`;
+    }
+
+    function calculate() {
+      const name = value("name") || "Untitled opportunity";
+      const type = value("type");
+      const goal = Math.max(1, num("goal"));
+      const buyMarket = value("buyMarket") || "source";
+      const sellMarket = value("sellMarket") || "sell market";
+      const buyCost = num("buyCost");
+      const sellPrice = num("sellPrice");
+      const quantity = Math.max(0, num("quantity"));
+      const slippage = num("slippage") / 100;
+      const platformFee = num("platformFee") / 100;
+      const paymentFee = num("paymentFee") / 100;
+      const fixedFee = num("fixedFee");
+      const transferFee = num("transferFee");
+      const otherCost = num("otherCost");
+      const reserve = num("reserve") / 100;
+      const notes = value("notes");
+
+      const grossRevenue = sellPrice * quantity;
+      const acquisitionCost = buyCost * quantity;
+      const slippageCost = grossRevenue * slippage;
+      const platformCost = grossRevenue * platformFee;
+      const paymentCost = grossRevenue * paymentFee;
+      const fixedCost = fixedFee * quantity;
+      const reserveCost = grossRevenue * reserve;
+      const totalCost = acquisitionCost + slippageCost + platformCost + paymentCost + fixedCost + transferFee + otherCost + reserveCost;
+      const netProfit = grossRevenue - totalCost;
+      const costBasis = Math.max(0.000001, totalCost);
+      const roi = (netProfit / costBasis) * 100;
+      const profitPerUnit = quantity > 0 ? netProfit / quantity : 0;
+      const unitsToGoal = profitPerUnit > 0 ? Math.ceil(goal / profitPerUnit) : Infinity;
+      const breakEvenSell = quantity > 0 ? (totalCost / quantity) : 0;
+      const rawSpread = sellPrice - buyCost;
+      const decision = netProfit > 0 ? "WATCH / TEST SMALL" : "NO-GO";
+
+      metrics.innerHTML = `
+        <div class="metric ${netProfit <= 0 ? "danger" : ""}"><strong>${money(netProfit)}</strong>net profit</div>
+        <div class="metric"><strong>${pct(roi)}</strong>ROI after fees</div>
+        <div class="metric"><strong>${Number.isFinite(unitsToGoal) ? unitsToGoal : "N/A"}</strong>units to ${money(goal)}</div>
+      `;
+
+      const warnings = [];
+      if (netProfit <= 0) warnings.push("Net profit is not positive after fees.");
+      if (rawSpread <= 0) warnings.push("Raw spread is not positive.");
+      if (platformFee + paymentFee + reserve + slippage > 0.15) warnings.push("Percentage fees/reserves are high. Check if the spread can survive them.");
+      if (transferFee > netProfit && netProfit > 0) warnings.push("Transfer/network fee is larger than one-cycle net profit.");
+      if (type.includes("crypto")) warnings.push("Crypto spreads can vanish before funds move. This tool does not place trades.");
+
+      summary.textContent = `OPPORTUNITY
+${name}
+
+TYPE
+${type}
+
+ROUTE
+Buy/source: ${buyMarket}
+Sell: ${sellMarket}
+
+MATH
+Gross revenue: ${money(grossRevenue)}
+Acquisition cost: ${money(acquisitionCost)}
+Platform fee: ${money(platformCost)}
+Payment fee: ${money(paymentCost)}
+Fixed fees: ${money(fixedCost)}
+Transfer/network fee: ${money(transferFee)}
+Slippage: ${money(slippageCost)}
+Reserve: ${money(reserveCost)}
+Other cost: ${money(otherCost)}
+Total cost: ${money(totalCost)}
+Net profit: ${money(netProfit)}
+ROI after fees: ${pct(roi)}
+Profit per unit: ${money(profitPerUnit)}
+Break-even sell price per unit: ${money(breakEvenSell)}
+Units needed for ${money(goal)} net: ${Number.isFinite(unitsToGoal) ? unitsToGoal : "N/A"}
+
+DECISION
+${decision}
+
+WARNINGS
+${warnings.length ? warnings.map(item => `- ${item}`).join("\n") : "- No automatic warnings. Still check rights, rules, liquidity, and delivery."}
+
+NOTES
+${notes}`;
+
+      return { name, type, netProfit, roi, decision };
+    }
+
+    function loadSaved() {
+      const saved = JSON.parse(localStorage.getItem("spreadRows") || "[]");
+      savedRows.innerHTML = saved.map(row => `
+        <tr>
+          <td>${row.name}</td>
+          <td>${row.type}</td>
+          <td>${money(row.netProfit)}</td>
+          <td>${pct(row.roi)}</td>
+          <td>${row.decision}</td>
+        </tr>
+      `).join("");
+    }
+
+    form.addEventListener("submit", event => {
+      event.preventDefault();
+      calculate();
+    });
+
+    ids.forEach(id => {
+      document.getElementById(id).addEventListener("input", calculate);
+    });
+
+    saveBtn.addEventListener("click", () => {
+      const row = calculate();
+      const saved = JSON.parse(localStorage.getItem("spreadRows") || "[]");
+      saved.unshift(row);
+      localStorage.setItem("spreadRows", JSON.stringify(saved.slice(0, 20)));
+      loadSaved();
+    });
+
+    copyBtn.addEventListener("click", async () => {
+      calculate();
+      try {
+        await navigator.clipboard.writeText(summary.textContent);
+        copyBtn.textContent = "Copied";
+        setTimeout(() => copyBtn.textContent = "Copy Summary", 1200);
+      } catch (error) {
+        summary.focus();
+      }
+    });
+
+    clearBtn.addEventListener("click", () => {
+      localStorage.removeItem("spreadRows");
+      loadSaved();
+    });
+
+    calculate();
+    loadSaved();
+  </script>
+</body>
+</html>
