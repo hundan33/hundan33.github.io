@@ -9,6 +9,7 @@ Suggested payment: **$19** if useful.
 - [Download the full kit](https://github.com/hundan33/hundan33.github.io/raw/main/internet-arbitrage-field-kit/downloads/internet-arbitrage-field-kit.zip)
 - [Open the calculator file](spread-profit-calculator.html)
 - [Read the arbitrage map](internet-arbitrage-map.md)
+- [Read the opportunity radar](opportunity-radar.md)
 - [Read the deal checklist](deal-evaluation-checklist.md)
 - [Read the no-go rules](no-go-rules.md)
 - [Copy share posts](share-posts.md)
