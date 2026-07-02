@@ -19,6 +19,7 @@ It does not place trades, move funds, use private keys, or guarantee profit. It 
 - `no-go-rules.md` - rules for avoiding scams, spam, ToS abuse, and bad-risk deals.
 - `listing-copy.md` - product listing copy.
 - `share-posts.md` - short posts for distribution.
+- `articles/` - public guide pages for the bounty scanner, spread calculator, and funding-rate watch.
 
 ## Suggested Price
 
@@ -85,3 +86,9 @@ $queries = @(
 ```
 
 The bounty scan is observational only. It checks seeded public issue URLs, can optionally discover more URLs through GitHub Search, estimates cash-like reward value, filters closed/non-cash/paused/external-account issues, and still requires a valid fork/PR/claim workflow before any payout is real.
+
+## Public Guides
+
+- `articles/github-bounty-scanner.html` - how the GitHub bounty scanner filters cash-like rewards and account friction.
+- `articles/spread-profit-calculator.html` - how to use fee math before acting on a spread.
+- `articles/funding-rate-watch.html` - how to interpret funding-rate rows before considering cash-and-carry work.

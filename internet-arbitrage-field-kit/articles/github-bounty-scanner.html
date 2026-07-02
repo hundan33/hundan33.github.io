@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GitHub Bounty Scanner With Proxy Support</title>
+  <meta name="description" content="A read-only GitHub bounty scanner for finding cash-like issue rewards and filtering non-cash, paused, external-account, and too-small tasks.">
+  <style>
+    :root { --ink:#182126; --muted:#53636c; --line:#d8e0df; --paper:#fff; --wash:#f6f8f9; --teal:#08786e; --amber:#b45f06; --blue:#315f9b; }
+    * { box-sizing: border-box; }
+    body { margin:0; font-family:Arial, Helvetica, sans-serif; color:var(--ink); background:var(--wash); line-height:1.55; overflow-x:hidden; }
+    main { max-width:900px; margin:0 auto; padding:36px 20px 56px; }
+    h1 { margin:0; font-size:clamp(34px, 6vw, 60px); line-height:1; letter-spacing:0; }
+    h2 { margin:30px 0 10px; font-size:28px; letter-spacing:0; }
+    p, li { color:var(--muted); }
+    a { color:var(--blue); }
+    .panel { margin:24px 0; padding:18px; background:var(--paper); border:1px solid var(--line); border-radius:8px; }
+    .actions { display:flex; flex-wrap:wrap; gap:10px; margin-top:18px; }
+    .button { display:inline-flex; min-height:42px; align-items:center; justify-content:center; padding:10px 14px; border-radius:8px; border:1px solid var(--line); text-decoration:none; font-weight:700; color:var(--ink); background:#fff; }
+    .button.primary { border-color:var(--teal); background:var(--teal); color:#fff; }
+    code, pre { overflow-wrap:anywhere; background:#eef3f8; color:var(--blue); border-radius:6px; }
+    code { padding:2px 4px; }
+    pre { padding:14px; overflow:auto; }
+  </style>
+</head>
+<body>
+  <main>
+    <p><a href="../">Internet Arbitrage Field Kit</a></p>
+    <h1>GitHub bounty scanner with proxy support</h1>
+    <p>The bounty scanner is a read-only PowerShell script for checking public GitHub issues before spending time on a pull request. It estimates cash-like rewards, flags friction, and keeps weak opportunities out of the work queue.</p>
+
+    <div class="panel">
+      <strong>Latest included scan</strong>
+      <p>20 issue URLs checked, 0 direct candidates. The largest cash-like issue was 250,000 sats, about $154.32 at scan time, but it required AIBTC identity and external account setup.</p>
+      <div class="actions">
+        <a class="button primary" href="../latest-bounty-watch.md">Read latest report</a>
+        <a class="button" href="../scan-github-bounties.ps1">Download scanner</a>
+      </div>
+    </div>
+
+    <h2>What It Filters</h2>
+    <ul>
+      <li>Closed or already-claimed issues.</li>
+      <li>Non-cash badge, hall-of-fame, token-only, or unclear rewards.</li>
+      <li>Paused bounty programs found in repository docs.</li>
+      <li>External-account tasks that need BountyHub, AIBTC, x402, Discord, PayPal, or other setup before work can start.</li>
+      <li>Too-small rewards below the configured USD threshold.</li>
+    </ul>
+
+    <h2>Search-Assisted Scan</h2>
+    <pre><code>$queries = @(
+  'state:open "Bounty: $100" -security -exploit -CVE -attack -red',
+  'state:open "$100 bounty" "pull request" -security -exploit -CVE -attack',
+  'state:open "bounty" "USDC" "pull request" -security -exploit -CVE -attack',
+  'state:open "bounty" "$50" "good first issue" -security -exploit -CVE -attack'
+)
+.\scan-github-bounties.ps1 -Proxy http://127.0.0.1:10808 -MinUsd 10 -SearchQueries $queries -MaxSearchResultsPerQuery 5 -SearchDelaySec 7 -ExportCsv latest-bounty-watch.csv -ReportPath latest-bounty-watch.md</code></pre>
+
+    <h2>Download</h2>
+    <p>The full kit includes the bounty scanner, latest scan reports, a spread calculator, funding-rate watch, and decision checklists.</p>
+    <div class="actions">
+      <a class="button primary" href="https://github.com/hundan33/hundan33.github.io/raw/main/internet-arbitrage-field-kit/downloads/internet-arbitrage-field-kit.zip">Download full kit</a>
+      <a class="button" href="../README.md">View file list</a>
+    </div>
+  </main>
+</body>
+</html>

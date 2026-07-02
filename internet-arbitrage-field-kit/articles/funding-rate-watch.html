@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Funding Rate Watch For Fee-Recovery Checks</title>
+  <meta name="description" content="Use a read-only funding-rate watch to estimate annualized rate, fee recovery, and whether a cash-and-carry row is worth further review.">
+  <style>
+    :root { --ink:#182126; --muted:#53636c; --line:#d8e0df; --paper:#fff; --wash:#f6f8f9; --teal:#08786e; --amber:#b45f06; --blue:#315f9b; }
+    * { box-sizing: border-box; }
+    body { margin:0; font-family:Arial, Helvetica, sans-serif; color:var(--ink); background:var(--wash); line-height:1.55; overflow-x:hidden; }
+    main { max-width:900px; margin:0 auto; padding:36px 20px 56px; }
+    h1 { margin:0; font-size:clamp(34px, 6vw, 60px); line-height:1; letter-spacing:0; }
+    h2 { margin:30px 0 10px; font-size:28px; letter-spacing:0; }
+    p, li { color:var(--muted); }
+    a { color:var(--blue); }
+    .panel { margin:24px 0; padding:18px; background:var(--paper); border:1px solid var(--line); border-radius:8px; }
+    .actions { display:flex; flex-wrap:wrap; gap:10px; margin-top:18px; }
+    .button { display:inline-flex; min-height:42px; align-items:center; justify-content:center; padding:10px 14px; border-radius:8px; border:1px solid var(--line); text-decoration:none; font-weight:700; color:var(--ink); background:#fff; }
+    .button.primary { border-color:var(--teal); background:var(--teal); color:#fff; }
+    code, pre { overflow-wrap:anywhere; background:#eef3f8; color:var(--blue); border-radius:6px; }
+    code { padding:2px 4px; }
+    pre { padding:14px; overflow:auto; }
+  </style>
+</head>
+<body>
+  <main>
+    <p><a href="../">Internet Arbitrage Field Kit</a></p>
+    <h1>Funding-rate watch for fee-recovery checks</h1>
+    <p>Funding rates can look attractive before entry and exit fees are counted. The watch script checks public funding endpoints and estimates how many intervals are needed to cover a simple fee burden.</p>
+
+    <div class="panel">
+      <strong>Latest included scan</strong>
+      <p>42 assets scanned, 120 usable funding rows, 0 rows met the annualized-rate and fee-recovery filters. The strongest observed row was BNB on Binance Futures at about 11.93% annualized, but it needed about 37 funding intervals to cover estimated fees.</p>
+      <div class="actions">
+        <a class="button primary" href="../latest-funding-watch.md">Read latest report</a>
+        <a class="button" href="../scan-funding-rates.ps1">Download scanner</a>
+      </div>
+    </div>
+
+    <h2>Example Command</h2>
+    <pre><code>.\scan-funding-rates.ps1 -Proxy http://127.0.0.1:10808 -TradeUsd 100 -FeePercentPerSide 0.1 -MinAnnualizedPct 20 -MaxIntervalsToCoverFees 6 -ExportCsv latest-funding-watch.csv -ReportPath latest-funding-watch.md</code></pre>
+
+    <h2>What It Does Not Prove</h2>
+    <ul>
+      <li>No liquidation risk calculation.</li>
+      <li>No borrow-cost or margin requirement validation.</li>
+      <li>No guarantee the spot and perpetual positions can be opened or closed at shown prices.</li>
+      <li>No tax, exchange, or account-limit review.</li>
+    </ul>
+  </main>
+</body>
+</html>

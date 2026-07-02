@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Spread Profit Calculator For Online Arbitrage</title>
+  <meta name="description" content="Use an offline spread profit calculator to check marketplace, digital product, affiliate, and crypto spreads after fees and fixed costs.">
+  <style>
+    :root { --ink:#182126; --muted:#53636c; --line:#d8e0df; --paper:#fff; --wash:#f6f8f9; --teal:#08786e; --amber:#b45f06; --blue:#315f9b; }
+    * { box-sizing: border-box; }
+    body { margin:0; font-family:Arial, Helvetica, sans-serif; color:var(--ink); background:var(--wash); line-height:1.55; overflow-x:hidden; }
+    main { max-width:900px; margin:0 auto; padding:36px 20px 56px; }
+    h1 { margin:0; font-size:clamp(34px, 6vw, 60px); line-height:1; letter-spacing:0; }
+    h2 { margin:30px 0 10px; font-size:28px; letter-spacing:0; }
+    p, li { color:var(--muted); }
+    a { color:var(--blue); }
+    img { width:100%; border:1px solid var(--line); border-radius:8px; background:#fff; }
+    .panel { margin:24px 0; padding:18px; background:var(--paper); border:1px solid var(--line); border-radius:8px; }
+    .actions { display:flex; flex-wrap:wrap; gap:10px; margin-top:18px; }
+    .button { display:inline-flex; min-height:42px; align-items:center; justify-content:center; padding:10px 14px; border-radius:8px; border:1px solid var(--line); text-decoration:none; font-weight:700; color:var(--ink); background:#fff; }
+    .button.primary { border-color:var(--teal); background:var(--teal); color:#fff; }
+  </style>
+</head>
+<body>
+  <main>
+    <p><a href="../">Internet Arbitrage Field Kit</a></p>
+    <h1>Spread profit calculator for online arbitrage</h1>
+    <p>A raw price gap is not profit. The calculator checks whether a spread still works after platform fees, payment fees, fixed transaction costs, transfer costs, slippage, refunds, and support reserve.</p>
+    <div class="panel">
+      <img src="../assets/calculator-preview.png" alt="Spread profit calculator preview">
+      <div class="actions">
+        <a class="button primary" href="../spread-profit-calculator.html">Open calculator</a>
+        <a class="button" href="https://github.com/hundan33/hundan33.github.io/raw/main/internet-arbitrage-field-kit/downloads/internet-arbitrage-field-kit.zip">Download full kit</a>
+      </div>
+    </div>
+
+    <h2>Good Checks Before Acting</h2>
+    <ul>
+      <li>Does the sell price beat the buy price after every fee?</li>
+      <li>Does a fixed cost wipe out small-order profit?</li>
+      <li>How many units are needed to reach a target like $100?</li>
+      <li>Does ROI become unavailable when the cost base is zero?</li>
+      <li>Is the spread large enough to survive execution delays?</li>
+    </ul>
+
+    <h2>Common Uses</h2>
+    <p>Digital product bundle pricing, marketplace fee comparison, affiliate ROI checks, API resale math, and crypto spread observation.</p>
+    <p>This is not financial advice, and the calculator does not place trades or move funds.</p>
+  </main>
+</body>
+</html>
