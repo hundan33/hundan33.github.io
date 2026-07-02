@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1200" viewBox="0 0 1600 1200">
+  <rect width="1600" height="1200" fill="#f4f1e8"/>
+  <rect x="130" y="130" width="1340" height="940" rx="24" fill="#fffefa" stroke="#20272b" stroke-width="8"/>
+  <text x="210" y="285" font-family="Arial, Helvetica, sans-serif" font-size="70" font-weight="700" fill="#20272b">Marketplace Listing Generator</text>
+  <text x="210" y="390" font-family="Arial, Helvetica, sans-serif" font-size="42" fill="#637078">Draft titles, descriptions, tags, and buyer replies</text>
+  <rect x="210" y="500" width="1180" height="120" rx="14" fill="#eef8f4" stroke="#d8d1c6" stroke-width="4"/>
+  <rect x="210" y="665" width="1180" height="120" rx="14" fill="#ffffff" stroke="#d8d1c6" stroke-width="4"/>
+  <rect x="210" y="830" width="1180" height="120" rx="14" fill="#eef8f4" stroke="#d8d1c6" stroke-width="4"/>
+  <text x="250" y="575" font-family="Arial, Helvetica, sans-serif" font-size="36" font-weight="700" fill="#126f63">Product notes in</text>
+  <text x="250" y="740" font-family="Arial, Helvetica, sans-serif" font-size="36" font-weight="700" fill="#126f63">Listing copy out</text>
+  <text x="250" y="905" font-family="Arial, Helvetica, sans-serif" font-size="36" font-weight="700" fill="#126f63">$9 offline HTML tool</text>
+</svg>

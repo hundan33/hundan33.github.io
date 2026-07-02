@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1200" viewBox="0 0 1600 1200">
+  <rect width="1600" height="1200" fill="#f4f1e8"/>
+  <rect x="130" y="130" width="1340" height="940" rx="24" fill="#fffefa" stroke="#126f63" stroke-width="8"/>
+  <text x="210" y="285" font-family="Arial, Helvetica, sans-serif" font-size="72" font-weight="700" fill="#20272b">Bilingual Seller Reply Kit</text>
+  <text x="210" y="390" font-family="Arial, Helvetica, sans-serif" font-size="42" fill="#637078">English customer replies with Chinese notes</text>
+  <rect x="210" y="510" width="520" height="340" rx="18" fill="#eef8f4" stroke="#d8d1c6" stroke-width="4"/>
+  <rect x="805" y="510" width="520" height="340" rx="18" fill="#ffffff" stroke="#d8d1c6" stroke-width="4"/>
+  <text x="255" y="610" font-family="Arial, Helvetica, sans-serif" font-size="38" font-weight="700" fill="#126f63">Templates</text>
+  <text x="850" y="610" font-family="Arial, Helvetica, sans-serif" font-size="38" font-weight="700" fill="#126f63">Generator</text>
+  <text x="255" y="700" font-family="Arial, Helvetica, sans-serif" font-size="30" fill="#20272b">35+ seller messages</text>
+  <text x="850" y="700" font-family="Arial, Helvetica, sans-serif" font-size="30" fill="#20272b">Offline browser tool</text>
+  <text x="255" y="765" font-family="Arial, Helvetica, sans-serif" font-size="30" fill="#20272b">Shipping, refunds, reviews</text>
+  <text x="850" y="765" font-family="Arial, Helvetica, sans-serif" font-size="30" fill="#20272b">Copy-ready replies</text>
+  <text x="210" y="970" font-family="Arial, Helvetica, sans-serif" font-size="40" font-weight="700" fill="#a94231">$19 digital download</text>
+</svg>

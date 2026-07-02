@@ -1,0 +1,5 @@
+﻿User-agent: *
+Allow: /
+
+Sitemap: https://hundan33.github.io/online-seller-mini-toolkit/sitemap.xml
+

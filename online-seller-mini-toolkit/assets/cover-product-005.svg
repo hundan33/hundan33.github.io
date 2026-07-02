@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="600" viewBox="0 0 900 600" role="img" aria-labelledby="title desc">
+  <title id="title">Tiny Digital Product Launch Kit Cover</title>
+  <desc id="desc">A clean cover for a digital product launch kit.</desc>
+  <rect width="900" height="600" fill="#fffefa"/>
+  <rect x="44" y="44" width="812" height="512" rx="22" fill="#e8f5f2" stroke="#126f63" stroke-width="6"/>
+  <circle cx="154" cy="150" r="48" fill="#126f63"/>
+  <path d="M136 151h36m-18-18v36" stroke="#fffefa" stroke-width="10" stroke-linecap="round"/>
+  <text x="94" y="260" fill="#20272b" font-family="Arial, Helvetica, sans-serif" font-size="58" font-weight="700">Tiny Digital</text>
+  <text x="94" y="330" fill="#20272b" font-family="Arial, Helvetica, sans-serif" font-size="58" font-weight="700">Product Launch</text>
+  <text x="94" y="396" fill="#637078" font-family="Arial, Helvetica, sans-serif" font-size="32">Planner + checklist + upload copy</text>
+  <rect x="94" y="444" width="250" height="54" rx="10" fill="#126f63"/>
+  <text x="124" y="481" fill="#fffefa" font-family="Arial, Helvetica, sans-serif" font-size="26" font-weight="700">Bonus Kit</text>
+  <rect x="570" y="124" width="196" height="256" rx="16" fill="#fffefa" stroke="#d8d1c6" stroke-width="4"/>
+  <rect x="604" y="164" width="128" height="18" rx="9" fill="#126f63"/>
+  <rect x="604" y="208" width="98" height="14" rx="7" fill="#d8d1c6"/>
+  <rect x="604" y="246" width="128" height="14" rx="7" fill="#d8d1c6"/>
+  <rect x="604" y="284" width="84" height="14" rx="7" fill="#d8d1c6"/>
+</svg>

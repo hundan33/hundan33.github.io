@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1200" viewBox="0 0 1600 1200">
+  <rect width="1600" height="1200" fill="#f4f1e8"/>
+  <rect x="130" y="130" width="1340" height="940" rx="24" fill="#fffefa" stroke="#126f63" stroke-width="8"/>
+  <text x="210" y="285" font-family="Arial, Helvetica, sans-serif" font-size="70" font-weight="700" fill="#20272b">Invoice And Receipt Generator</text>
+  <text x="210" y="390" font-family="Arial, Helvetica, sans-serif" font-size="42" fill="#637078">Simple draft documents for freelancers and sellers</text>
+  <rect x="250" y="500" width="1100" height="390" rx="18" fill="#ffffff" stroke="#d8d1c6" stroke-width="4"/>
+  <line x1="310" y1="610" x2="1290" y2="610" stroke="#d8d1c6" stroke-width="5"/>
+  <line x1="310" y1="700" x2="1290" y2="700" stroke="#d8d1c6" stroke-width="5"/>
+  <line x1="310" y1="790" x2="1290" y2="790" stroke="#d8d1c6" stroke-width="5"/>
+  <text x="310" y="570" font-family="Arial, Helvetica, sans-serif" font-size="38" font-weight="700" fill="#126f63">INVOICE / RECEIPT</text>
+  <text x="310" y="675" font-family="Arial, Helvetica, sans-serif" font-size="30" fill="#20272b">Line items, tax, discount, total</text>
+  <text x="310" y="765" font-family="Arial, Helvetica, sans-serif" font-size="30" fill="#20272b">Payment request message included</text>
+  <text x="210" y="985" font-family="Arial, Helvetica, sans-serif" font-size="40" font-weight="700" fill="#a94231">$9 offline HTML tool</text>
+</svg>

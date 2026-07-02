@@ -1,0 +1,88 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Crypto Payment - Online Seller Mini Toolkit</title>
+  <meta name="description" content="Crypto payment address for the Online Seller Mini Toolkit.">
+  <link rel="canonical" href="https://hundan33.github.io/online-seller-mini-toolkit/crypto.html">
+  <meta property="og:title" content="Crypto Payment - Online Seller Mini Toolkit">
+  <meta property="og:description" content="Crypto payment address for the Online Seller Mini Toolkit.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://hundan33.github.io/online-seller-mini-toolkit/crypto.html">
+  <meta property="og:image" content="https://hundan33.github.io/online-seller-mini-toolkit/assets/cover-bundle.svg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <nav class="wrap nav">
+      <div class="brand">Crypto Payment</div>
+      <div class="navlinks">
+        <a href="index.html">Home</a>
+        <a href="sample.html">Free Sample</a>
+        <a href="demo.html">Demo</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="wrap">
+    <section class="hero">
+      <div>
+        <h1>Pay with crypto.</h1>
+        <p>Suggested payment for the full toolkit is $39. Use this address only after confirming the correct network and token. Crypto transfers are irreversible.</p>
+        <div class="price">$39 toolkit</div>
+        <div class="sample" id="address">0x1B18F54A416cA5d77945d9E05C66E3D00020578f</div>
+        <div class="actions">
+          <button class="button" id="copyAddress" type="button">Copy address</button>
+          <a class="button secondary" href="downloads/online-seller-mini-toolkit-bundle.zip">Download full bundle</a>
+          <a class="button secondary" href="https://hundan33.github.io/online-seller-mini-toolkit/downloads/online-seller-mini-toolkit-free-sample.zip">Download free sample</a>
+        </div>
+        <p id="copyStatus"></p>
+      </div>
+      <img class="cover" src="assets/cover-bundle.svg" alt="Online Seller Mini Toolkit cover">
+    </section>
+
+    <section class="section">
+      <h2>Before Sending</h2>
+      <ul>
+        <li>Confirm the exact network, token, and amount.</li>
+        <li>Do not send from a chain or exchange withdrawal screen you do not understand.</li>
+        <li>The download is public so no email or manual delivery is needed.</li>
+        <li>Use the explorer links below to verify any transaction you send.</li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <h2>Explorer Links</h2>
+      <p>Use the explorer for the network you actually used.</p>
+      <div class="actions">
+        <a class="button secondary" href="https://etherscan.io/address/0x1B18F54A416cA5d77945d9E05C66E3D00020578f">Ethereum</a>
+        <a class="button secondary" href="https://basescan.org/address/0x1B18F54A416cA5d77945d9E05C66E3D00020578f">Base</a>
+        <a class="button secondary" href="https://arbiscan.io/address/0x1B18F54A416cA5d77945d9E05C66E3D00020578f">Arbitrum</a>
+        <a class="button secondary" href="https://polygonscan.com/address/0x1B18F54A416cA5d77945d9E05C66E3D00020578f">Polygon</a>
+        <a class="button secondary" href="https://bscscan.com/address/0x1B18F54A416cA5d77945d9E05C66E3D00020578f">BNB Chain</a>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Important</h2>
+      <p class="notice">This page is a payment instruction page, not financial advice. Confirm chain and token before sending. Transfers to the wrong chain/token may be unrecoverable.</p>
+    </section>
+  </main>
+
+  <script>
+    document.getElementById('copyAddress').addEventListener('click', async () => {
+      const address = document.getElementById('address').textContent.trim();
+      const status = document.getElementById('copyStatus');
+      try {
+        await navigator.clipboard.writeText(address);
+        status.textContent = 'Address copied.';
+      } catch (error) {
+        status.textContent = 'Copy failed. Select and copy the address manually.';
+      }
+    });
+  </script>
+</body>
+</html>
+
