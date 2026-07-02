@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Internet Arbitrage Field Kit</title>
+  <meta name="description" content="Offline calculator and checklist kit for evaluating online price spreads after fees, transfer costs, and slippage.">
+  <style>
+    :root {
+      --ink: #182126;
+      --muted: #53636c;
+      --line: #d8e0df;
+      --paper: #ffffff;
+      --wash: #f6f8f9;
+      --teal: #08786e;
+      --teal-dark: #075f58;
+      --amber: #b45f06;
+      --blue: #315f9b;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--ink);
+      background: var(--wash);
+      line-height: 1.5;
+      overflow-x: hidden;
+    }
+
+    a { color: inherit; }
+
+    .hero {
+      position: relative;
+      min-height: 78vh;
+      padding: 28px min(6vw, 72px);
+      display: grid;
+      align-content: center;
+      overflow: hidden;
+      background: #111b1f url("assets/calculator-preview.png") center / cover no-repeat;
+      color: #ffffff;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(7, 16, 19, 0.68);
+    }
+
+    .hero > * {
+      position: relative;
+      width: min(820px, calc(100vw - 56px));
+      max-width: 100%;
+    }
+
+    .eyebrow {
+      margin: 0 0 14px;
+      color: #b7e7df;
+      font-weight: 700;
+      letter-spacing: 0;
+      text-transform: uppercase;
+      font-size: 13px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(42px, 8vw, 86px);
+      line-height: 0.95;
+      letter-spacing: 0;
+    }
+
+    .hero p {
+      margin: 20px 0 0;
+      max-width: 700px;
+      font-size: clamp(18px, 2.4vw, 24px);
+      color: #e3edef;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 28px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 11px 16px;
+      border: 1px solid rgba(255, 255, 255, 0.36);
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 700;
+      background: #ffffff;
+      color: var(--ink);
+      text-align: center;
+    }
+
+    .button.secondary {
+      background: transparent;
+      color: #ffffff;
+    }
+
+    main {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 34px 20px 58px;
+    }
+
+    .notice {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 18px;
+      align-items: center;
+      padding: 16px 0 24px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .price {
+      font-size: 34px;
+      font-weight: 800;
+      color: var(--teal-dark);
+      white-space: nowrap;
+    }
+
+    .section {
+      padding: 32px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    h2 {
+      margin: 0 0 14px;
+      font-size: clamp(26px, 4vw, 38px);
+      letter-spacing: 0;
+    }
+
+    p { color: var(--muted); }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .item {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 16px;
+    }
+
+    .item strong {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--ink);
+    }
+
+    .scan {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .stat {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .stat div {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 16px;
+    }
+
+    .stat b {
+      display: block;
+      color: var(--amber);
+      font-size: 28px;
+      line-height: 1;
+    }
+
+    code {
+      word-break: break-all;
+      color: var(--blue);
+      background: #eef3f8;
+      padding: 2px 4px;
+      border-radius: 4px;
+    }
+
+    .pay {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 18px;
+    }
+
+    .pay code {
+      display: block;
+      margin: 8px 0 14px;
+      padding: 12px;
+      background: #f3f5f7;
+      color: var(--ink);
+    }
+
+    footer {
+      padding: 26px 20px 44px;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    @media (max-width: 780px) {
+      .hero { min-height: 82vh; }
+      .hero p {
+        width: min(300px, 100%);
+        font-size: 18px;
+      }
+      .hero .button {
+        width: 100%;
+      }
+      .notice,
+      .scan {
+        grid-template-columns: 1fr;
+      }
+      .grid,
+      .stat {
+        grid-template-columns: 1fr;
+      }
+      .price { white-space: normal; }
+    }
+  </style>
+</head>
+<body>
+  <section class="hero">
+    <p class="eyebrow">Offline calculator, scanner, and checklists</p>
+    <h1>Internet Arbitrage Field Kit</h1>
+    <p>Check whether an online spread survives fees, slippage, transfers, and execution risk.</p>
+    <div class="actions">
+      <a class="button" href="https://github.com/hundan33/hundan33.github.io/raw/main/internet-arbitrage-field-kit/downloads/internet-arbitrage-field-kit.zip">Download full kit</a>
+      <a class="button secondary" href="spread-profit-calculator.html">Open calculator</a>
+      <a class="button secondary" href="latest-spread-watch.md">Read latest scan</a>
+    </div>
+  </section>
+
+  <main>
+    <section class="notice">
+      <div>
+        <h2>Suggested payment</h2>
+        <p>The kit is public so it is easy to inspect. If it saves time or prevents a bad trade, the suggested payment is $19.</p>
+      </div>
+      <div class="price">$19</div>
+    </section>
+
+    <section class="section">
+      <h2>What is inside</h2>
+      <div class="grid">
+        <div class="item">
+          <strong>Spread calculator</strong>
+          Estimate net profit, break-even price, ROI, and units needed to reach a target like $100.
+        </div>
+        <div class="item">
+          <strong>Live spread scanner</strong>
+          Read public spot ticker APIs through a proxy and compare observed USDT prices across multiple venues.
+        </div>
+        <div class="item">
+          <strong>Decision checklists</strong>
+          Avoid obvious bad-risk deals before spending time, capital, or attention.
+        </div>
+      </div>
+    </section>
+
+    <section class="section scan">
+      <div>
+        <h2>Latest live scan</h2>
+        <p>The latest included report scanned a wider list of common USDT pairs with strict USDT-only mode, a $100 trade size, 0.1% assumed fee per side, and a $0.25 manual transfer/fixed-cost estimate.</p>
+        <p>The result was a no-go: no scanned row remained positive after estimated trading fees and transfer/fixed cost. This is the point of the kit: it should stop weak opportunities, not decorate them.</p>
+      </div>
+      <div class="stat">
+        <div><b>43</b>assets scanned</div>
+        <div><b>42</b>usable rows</div>
+        <div><b>0</b>positive after costs</div>
+        <div><b>GRT</b>closest row, still negative</div>
+      </div>
+    </section>
+
+    <section class="section pay">
+      <h2>Pay or support</h2>
+      <p>Send USDC, USDT, DAI, or another agreed EVM asset only after confirming the chain and token.</p>
+      <code>0x1B18F54A416cA5d77945d9E05C66E3D00020578f</code>
+      <div class="actions">
+        <a class="button" href="https://github.com/hundan33/hundan33.github.io/raw/main/internet-arbitrage-field-kit/downloads/internet-arbitrage-field-kit.zip">Download zip</a>
+        <a class="button secondary" style="color:var(--ink);border-color:var(--line)" href="README.md">View file listing</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    This is not financial, legal, or tax advice. The kit does not place trades, move funds, use private keys, or guarantee profit.
+  </footer>
+</body>
+</html>

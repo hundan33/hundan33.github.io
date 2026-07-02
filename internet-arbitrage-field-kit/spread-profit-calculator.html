@@ -344,7 +344,7 @@
     }
 
     function pct(value) {
-      if (!Number.isFinite(value)) return "0.00%";
+      if (!Number.isFinite(value)) return "N/A";
       return `${value.toFixed(2)}%`;
     }
 
@@ -375,8 +375,7 @@
       const reserveCost = grossRevenue * reserve;
       const totalCost = acquisitionCost + slippageCost + platformCost + paymentCost + fixedCost + transferFee + otherCost + reserveCost;
       const netProfit = grossRevenue - totalCost;
-      const costBasis = Math.max(0.000001, totalCost);
-      const roi = (netProfit / costBasis) * 100;
+      const roi = totalCost > 0 ? (netProfit / totalCost) * 100 : NaN;
       const profitPerUnit = quantity > 0 ? netProfit / quantity : 0;
       const unitsToGoal = profitPerUnit > 0 ? Math.ceil(goal / profitPerUnit) : Infinity;
       const breakEvenSell = quantity > 0 ? (totalCost / quantity) : 0;
@@ -391,6 +390,7 @@
 
       const warnings = [];
       if (netProfit <= 0) warnings.push("Net profit is not positive after fees.");
+      if (totalCost <= 0) warnings.push("ROI is N/A because total cost is zero.");
       if (rawSpread <= 0) warnings.push("Raw spread is not positive.");
       if (platformFee + paymentFee + reserve + slippage > 0.15) warnings.push("Percentage fees/reserves are high. Check if the spread can survive them.");
       if (transferFee > netProfit && netProfit > 0) warnings.push("Transfer/network fee is larger than one-cycle net profit.");
