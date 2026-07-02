@@ -107,6 +107,6 @@ It estimates:
 - Whether the reward appears non-cash.
 - Whether the reward meets a minimum candidate value.
 
-The latest included seed scan checked 6 issue URLs and found 0 candidates above the $10 threshold. The largest open cash-like issue was 35 XLM, about $6.99 at scan time, so the current action is watch/skip rather than work.
+The latest included seed scan checked 10 issue URLs and found 0 direct candidates above the $10 threshold after status and friction filters. The largest cash-like issue was 250,000 sats, about $154.15 at scan time, but it requires AIBTC identity, external account setup, and GitHub issue claiming before work can start. A $100 SecuritySkills issue was skipped because the repository bounty program is marked paused, and a $100 Memanto issue was watch-listed because it requires external service/BountyHub participation.
 
-It does not create forks, open pull requests, reserve bounties, verify maintainer payout history, or guarantee acceptance.
+It does not create forks, open pull requests, reserve bounties, verify maintainer payout history, complete external account setup, or guarantee acceptance.
