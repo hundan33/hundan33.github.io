@@ -22,6 +22,7 @@ This toolkit gives you reusable starting points so you can move faster without s
 - [Download the free sample](https://github.com/hundan33/hundan33.github.io/raw/main/online-seller-mini-toolkit/downloads/online-seller-mini-toolkit-free-sample.zip)
 - [Read free customer reply templates](free-customer-reply-templates.md)
 - [Read the quick seller cleanup checklist](quick-seller-cleanup-checklist.md)
+- [Copy share posts](live-share-kit.md)
 
 ## Pay Or Support
 

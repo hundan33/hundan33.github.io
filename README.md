@@ -7,6 +7,7 @@ Small online tools and digital downloads.
 - [Download the free sample](https://github.com/hundan33/hundan33.github.io/raw/main/online-seller-mini-toolkit/downloads/online-seller-mini-toolkit-free-sample.zip)
 - [Download the full Online Seller Mini Toolkit](https://github.com/hundan33/hundan33.github.io/raw/main/online-seller-mini-toolkit/downloads/online-seller-mini-toolkit-bundle.zip)
 - Suggested payment: **$39** to `0x1B18F54A416cA5d77945d9E05C66E3D00020578f`
+- [Share copy](online-seller-mini-toolkit/live-share-kit.md)
 
 ## Featured Download
 
