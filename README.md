@@ -6,11 +6,13 @@ Small online tools and digital downloads.
 
 - [Open the Internet Arbitrage Field Kit](https://github.com/hundan33/hundan33.github.io/tree/main/internet-arbitrage-field-kit)
 - [Download the Internet Arbitrage Field Kit](https://github.com/hundan33/hundan33.github.io/raw/main/internet-arbitrage-field-kit/downloads/internet-arbitrage-field-kit.zip)
+- [Open the GitHub Bounty Scanner Mini Kit](https://github.com/hundan33/hundan33.github.io/tree/main/github-bounty-scanner)
+- [Download the GitHub Bounty Scanner Mini Kit](https://github.com/hundan33/hundan33.github.io/raw/main/github-bounty-scanner/downloads/github-bounty-scanner-mini-kit.zip)
 - [Download the free seller toolkit sample](https://github.com/hundan33/hundan33.github.io/raw/main/online-seller-mini-toolkit/downloads/online-seller-mini-toolkit-free-sample.zip)
 - [Download the full Online Seller Mini Toolkit](https://github.com/hundan33/hundan33.github.io/raw/main/online-seller-mini-toolkit/downloads/online-seller-mini-toolkit-bundle.zip)
 - [Share copy](online-seller-mini-toolkit/live-share-kit.md)
 
-Suggested payments: **$19** for the arbitrage kit, **$39** for the seller toolkit to `0x1B18F54A416cA5d77945d9E05C66E3D00020578f`.
+Suggested payments: **$9** for the bounty scanner, **$19** for the arbitrage kit, **$39** for the seller toolkit to `0x1B18F54A416cA5d77945d9E05C66E3D00020578f`.
 
 ## Featured Download
 
@@ -33,6 +35,23 @@ Suggested payment: **$19** if the kit is useful.
 - [Download the full kit](https://github.com/hundan33/hundan33.github.io/raw/main/internet-arbitrage-field-kit/downloads/internet-arbitrage-field-kit.zip)
 - [Read the latest bounty watch](https://github.com/hundan33/hundan33.github.io/blob/main/internet-arbitrage-field-kit/latest-bounty-watch.md)
 - [Read the latest live spread watch](https://github.com/hundan33/hundan33.github.io/blob/main/internet-arbitrage-field-kit/latest-spread-watch.md)
+
+### GitHub Bounty Scanner Mini Kit
+
+Read-only PowerShell scanner for triaging public GitHub issue bounties before spending time on a pull request.
+
+Use it to check:
+
+- Seeded public GitHub issue URLs.
+- GitHub Search query batches.
+- USD, USDC, XLM, and sats reward estimates.
+- Closed, paused, non-cash, too-small, and external-account friction.
+
+Suggested payment: **$9** if useful.
+
+- [Open the product listing](github-bounty-scanner/)
+- [Download the mini kit](https://github.com/hundan33/hundan33.github.io/raw/main/github-bounty-scanner/downloads/github-bounty-scanner-mini-kit.zip)
+- [Read the latest bounty report](github-bounty-scanner/latest-bounty-watch.md)
 
 ### Online Seller Mini Toolkit
 
@@ -60,6 +79,7 @@ EVM address:
 `0x1B18F54A416cA5d77945d9E05C66E3D00020578f`
 
 Suggested payment for the Internet Arbitrage Field Kit: **$19**.
+Suggested payment for the GitHub Bounty Scanner Mini Kit: **$9**.
 Suggested payment for the Online Seller Mini Toolkit: **$39**.
 
 Confirm chain and token before sending. Crypto transfers are irreversible.

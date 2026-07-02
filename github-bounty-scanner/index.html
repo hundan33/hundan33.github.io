@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GitHub Bounty Scanner Mini Kit</title>
+  <meta name="description" content="A read-only PowerShell mini kit for searching and filtering public GitHub issue bounties by cash value, account friction, status, and payout risk.">
+  <style>
+    :root {
+      --ink: #182126;
+      --muted: #53636c;
+      --line: #d8e0df;
+      --paper: #ffffff;
+      --wash: #f6f8f9;
+      --teal: #08786e;
+      --amber: #b45f06;
+      --blue: #315f9b;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--ink);
+      background: var(--wash);
+      line-height: 1.5;
+      overflow-x: hidden;
+    }
+
+    a { color: inherit; }
+
+    .hero {
+      min-height: 72vh;
+      display: grid;
+      align-content: center;
+      padding: 34px min(6vw, 72px);
+      color: #ffffff;
+      background: #111b1f url("assets/bounty-scanner-preview.png") center / cover no-repeat;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(7, 16, 19, 0.72);
+    }
+
+    .hero > * {
+      position: relative;
+      width: min(820px, calc(100vw - 56px));
+    }
+
+    .eyebrow {
+      margin: 0 0 14px;
+      color: #b7e7df;
+      font-weight: 700;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(42px, 8vw, 82px);
+      line-height: 0.98;
+      letter-spacing: 0;
+    }
+
+    .hero p {
+      max-width: 700px;
+      color: #e3edef;
+      font-size: clamp(18px, 2.4vw, 24px);
+    }
+
+    main {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 34px 20px 58px;
+    }
+
+    .notice,
+    .section {
+      padding: 28px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .notice {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 18px;
+      align-items: center;
+    }
+
+    h2 {
+      margin: 0 0 14px;
+      font-size: clamp(26px, 4vw, 38px);
+      letter-spacing: 0;
+    }
+
+    p, li { color: var(--muted); }
+
+    .price {
+      font-size: 34px;
+      font-weight: 800;
+      color: var(--teal);
+      white-space: nowrap;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .item {
+      padding: 16px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+
+    .item strong {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--ink);
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .button {
+      display: inline-flex;
+      min-height: 44px;
+      align-items: center;
+      justify-content: center;
+      padding: 11px 16px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 700;
+      background: #ffffff;
+      color: var(--ink);
+      text-align: center;
+    }
+
+    .hero .button {
+      border-color: rgba(255,255,255,0.36);
+    }
+
+    .button.primary {
+      background: var(--teal);
+      border-color: var(--teal);
+      color: #ffffff;
+    }
+
+    .hero .button.primary {
+      background: #ffffff;
+      color: var(--ink);
+      border-color: #ffffff;
+    }
+
+    code,
+    pre {
+      overflow-wrap: anywhere;
+      background: #eef3f8;
+      color: var(--blue);
+      border-radius: 6px;
+    }
+
+    code { padding: 2px 4px; }
+    pre { padding: 14px; overflow: auto; }
+
+    .pay {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 18px;
+    }
+
+    .pay code {
+      display: block;
+      padding: 12px;
+      color: var(--ink);
+      background: #f3f5f7;
+    }
+
+    footer {
+      padding: 26px 20px 44px;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    @media (max-width: 780px) {
+      .hero { min-height: 82vh; }
+      .notice,
+      .grid {
+        grid-template-columns: 1fr;
+      }
+      .button {
+        width: 100%;
+      }
+      .price {
+        white-space: normal;
+      }
+    }
+  </style>
+</head>
+<body>
+  <section class="hero">
+    <p class="eyebrow">Read-only GitHub issue bounty triage</p>
+    <h1>GitHub Bounty Scanner Mini Kit</h1>
+    <p>Search public GitHub issues, estimate cash-like reward value, and filter out closed, non-cash, paused, too-small, and external-account bounty tasks.</p>
+    <div class="actions">
+      <a class="button primary" href="https://github.com/hundan33/hundan33.github.io/raw/main/github-bounty-scanner/downloads/github-bounty-scanner-mini-kit.zip">Download mini kit</a>
+      <a class="button" href="latest-bounty-watch.md">Read latest report</a>
+      <a class="button" href="scan-github-bounties.ps1">Open script</a>
+    </div>
+  </section>
+
+  <main>
+    <section class="notice">
+      <div>
+        <h2>Suggested payment</h2>
+        <p>The mini kit is public so it is easy to inspect. If it saves time before chasing bad bounty issues, the suggested payment is $9.</p>
+      </div>
+      <div class="price">$9</div>
+    </section>
+
+    <section class="section">
+      <h2>What it checks</h2>
+      <div class="grid">
+        <div class="item">
+          <strong>Cash-like rewards</strong>
+          Estimates USD, USDC, XLM, and sats values with public price data.
+        </div>
+        <div class="item">
+          <strong>Friction filters</strong>
+          Watch-lists BountyHub, AIBTC, x402, Discord, PayPal, and other external-account tasks.
+        </div>
+        <div class="item">
+          <strong>Program status</strong>
+          Checks repository docs for paused bounty program language before treating an issue as a candidate.
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Latest included scan</h2>
+      <p>The latest search-assisted scan ran 4 GitHub Search queries, checked 20 issue URLs, and found 0 direct candidates after status and friction filters. It found high-value watch-list items, including 250,000 sats and $100 issues, but those required external accounts or were in paused programs.</p>
+      <div class="actions">
+        <a class="button primary" href="latest-bounty-watch.md">Read report</a>
+        <a class="button" href="latest-bounty-watch.csv">Download CSV</a>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Example command</h2>
+      <pre><code>$queries = @(
+  'state:open "Bounty: $100" -security -exploit -CVE -attack -red',
+  'state:open "$100 bounty" "pull request" -security -exploit -CVE -attack',
+  'state:open "bounty" "USDC" "pull request" -security -exploit -CVE -attack',
+  'state:open "bounty" "$50" "good first issue" -security -exploit -CVE -attack'
+)
+.\scan-github-bounties.ps1 -Proxy http://127.0.0.1:10808 -MinUsd 10 -SearchQueries $queries -MaxSearchResultsPerQuery 5 -SearchDelaySec 7 -ExportCsv latest-bounty-watch.csv -ReportPath latest-bounty-watch.md</code></pre>
+    </section>
+
+    <section class="section pay">
+      <h2>Pay or support</h2>
+      <p>Send USDC, USDT, DAI, or another agreed EVM asset only after confirming the chain and token.</p>
+      <code>0x1B18F54A416cA5d77945d9E05C66E3D00020578f</code>
+      <div class="actions">
+        <a class="button primary" href="https://github.com/hundan33/hundan33.github.io/raw/main/github-bounty-scanner/downloads/github-bounty-scanner-mini-kit.zip">Download zip</a>
+        <a class="button" href="README.md">View file listing</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    This mini kit does not create forks, open pull requests, reserve bounties, use private keys, or guarantee payout.
+  </footer>
+</body>
+</html>
