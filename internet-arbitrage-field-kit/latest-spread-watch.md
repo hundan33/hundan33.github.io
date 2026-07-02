@@ -1,6 +1,6 @@
 ﻿# Crypto Spread Watch
 
-Scan time: 2026-07-03 00:37:53 +08:00
+Scan time: 2026-07-03 00:44:53 +08:00
 
 Trade size: $100.00
 Assumed fee per side: 0.1000%
@@ -11,8 +11,8 @@ Proxy: http://127.0.0.1:10808
 
 ## Summary
 
-Assets scanned: BTC, ETH, SOL, XRP, DOGE, ADA, AVAX, LINK, LTC, BCH, DOT, TRX
-Rows generated: 12
+Assets scanned: BTC, ETH, SOL, XRP, DOGE, ADA, AVAX, LINK, LTC, BCH, DOT, TRX, BNB, NEAR, ATOM, FIL, ETC, OP, ARB, SUI, UNI, AAVE, INJ, SEI, WLD, PEPE, SHIB, XLM, HBAR, ICP, ALGO, VET, RENDER, STX, IMX, GRT, ENS, MKR, LDO, RUNE, APT, TIA, JUP
+Rows generated: 42
 Positive after estimated fees and transfer/fixed cost: 0
 Rows meeting minimum useful net: 0
 
@@ -22,22 +22,34 @@ No scanned asset remained positive after the estimated round-trip trading fees a
 
 | Asset | Buy | Ask | Sell | Bid | Raw Spread % | Gross $ | Fees $ | Transfer $ | Net After Costs $ | Cycles To $100 | Decision |
 | --- | --- | ---: | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- |
-| AVAX | OKX | 6.75 | Binance | 6.751000 | 0.0148% | $0.0148 | $0.200 | $0.25 | $-0.4352 |  | NO-GO AFTER COSTS |
-| ETH | Binance | 1689.520000 | OKX | 1689.77 | 0.0148% | $0.0148 | $0.200 | $0.25 | $-0.4352 |  | NO-GO AFTER COSTS |
-| LINK | OKX | 7.749 | Binance | 7.750000 | 0.0129% | $0.0129 | $0.200 | $0.25 | $-0.4371 |  | NO-GO AFTER COSTS |
-| SOL | Binance | 80.320000 | OKX | 80.33 | 0.0125% | $0.0125 | $0.200 | $0.25 | $-0.4375 |  | NO-GO AFTER COSTS |
-| BTC | Binance | 61296.000000 | KuCoin | 61301.9 | 0.0096% | $0.0096 | $0.200 | $0.25 | $-0.4404 |  | NO-GO AFTER COSTS |
-| XRP | OKX | 1.0894 | KuCoin | 1.08941 | 0.0009% | $0.0009 | $0.200 | $0.25 | $-0.4491 |  | NO-GO AFTER COSTS |
-| BCH | Binance | 219.600000 | OKX | 219.6 | 0% | $0 | $0.200 | $0.25 | $-0.450 |  | NO-GO AFTER COSTS |
-| LTC | OKX | 43.34 | Binance | 43.340000 | 0.0000% | $0.0000 | $0.200 | $0.25 | $-0.4500 |  | NO-GO AFTER COSTS |
-| TRX | OKX | 0.31827 | OKX | 0.31826 | -0.0031% | $-0.0031 | $0.200 | $0.25 | $-0.4531 |  | NO-GO AFTER COSTS |
-| DOT | KuCoin | 0.8472 | OKX | 0.8471 | -0.0118% | $-0.0118 | $0.200 | $0.25 | $-0.4618 |  | NO-GO AFTER COSTS |
-| DOGE | KuCoin | 0.07427 | KuCoin | 0.07426 | -0.0135% | $-0.0135 | $0.200 | $0.25 | $-0.4635 |  | NO-GO AFTER COSTS |
-| ADA | KuCoin | 0.1601 | KuCoin | 0.16 | -0.0625% | $-0.0625 | $0.200 | $0.25 | $-0.5125 |  | NO-GO AFTER COSTS |
+| GRT | OKX | 0.01812 | KuCoin | 0.01814 | 0.1104% | $0.1104 | $0.200 | $0.25 | $-0.3396 |  | NO-GO AFTER COSTS |
+| ALGO | KuCoin | 0.0864 | OKX | 0.08644 | 0.0463% | $0.0463 | $0.200 | $0.25 | $-0.4037 |  | NO-GO AFTER COSTS |
+| BNB | KuCoin | 560.912 | OKX | 561.1 | 0.0335% | $0.0335 | $0.200 | $0.25 | $-0.4165 |  | NO-GO AFTER COSTS |
+| WLD | KuCoin | 0.389 | OKX | 0.3891 | 0.0257% | $0.0257 | $0.200 | $0.25 | $-0.4243 |  | NO-GO AFTER COSTS |
+| SOL | Binance | 80.250000 | KuCoin | 80.27 | 0.0249% | $0.0249 | $0.200 | $0.25 | $-0.4251 |  | NO-GO AFTER COSTS |
+| LTC | KuCoin | 43.35 | OKX | 43.36 | 0.0231% | $0.0231 | $0.200 | $0.25 | $-0.4269 |  | NO-GO AFTER COSTS |
+| INJ | OKX | 4.602 | Binance | 4.603000 | 0.0217% | $0.0217 | $0.200 | $0.25 | $-0.4283 |  | NO-GO AFTER COSTS |
+| LINK | OKX | 7.771 | KuCoin | 7.7724 | 0.0180% | $0.0180 | $0.200 | $0.25 | $-0.4320 |  | NO-GO AFTER COSTS |
+| NEAR | KuCoin | 1.9197 | OKX | 1.92 | 0.0156% | $0.0156 | $0.200 | $0.25 | $-0.4344 |  | NO-GO AFTER COSTS |
+| AVAX | OKX | 6.756 | Binance | 6.757000 | 0.0148% | $0.0148 | $0.200 | $0.25 | $-0.4352 |  | NO-GO AFTER COSTS |
+| AAVE | Binance | 87.300000 | OKX | 87.31 | 0.0115% | $0.0115 | $0.200 | $0.25 | $-0.4385 |  | NO-GO AFTER COSTS |
+| BTC | OKX | 61433.6 | Binance | 61440.000000 | 0.0104% | $0.0104 | $0.200 | $0.25 | $-0.4396 |  | NO-GO AFTER COSTS |
+| ETH | KuCoin | 1696.76 | OKX | 1696.92 | 0.0094% | $0.0094 | $0.200 | $0.25 | $-0.4406 |  | NO-GO AFTER COSTS |
+| JUP | Binance | 0.243900 | OKX | 0.2439 | 0% | $0 | $0.200 | $0.25 | $-0.450 |  | NO-GO AFTER COSTS |
+| UNI | Binance | 3.215000 | OKX | 3.215 | 0% | $0 | $0.200 | $0.25 | $-0.450 |  | NO-GO AFTER COSTS |
+| ICP | KuCoin | 2.186 | Binance | 2.186000 | 0.0000% | $0.0000 | $0.200 | $0.25 | $-0.4500 |  | NO-GO AFTER COSTS |
+| IMX | KuCoin | 0.1223 | OKX | 0.1223 | 0% | $0 | $0.200 | $0.25 | $-0.450 |  | NO-GO AFTER COSTS |
+| LDO | Binance | 0.258100 | OKX | 0.2581 | 0% | $0 | $0.200 | $0.25 | $-0.450 |  | NO-GO AFTER COSTS |
+| BCH | Binance | 219.300000 | OKX | 219.3 | 0% | $0 | $0.200 | $0.25 | $-0.450 |  | NO-GO AFTER COSTS |
+| TRX | OKX | 0.3182 | KuCoin | 0.3182 | 0% | $0 | $0.200 | $0.25 | $-0.450 |  | NO-GO AFTER COSTS |
 
 ## Warnings
 
-- No API warnings.
+- OKX VET: Unexpected OKX response
+- OKX MKR: Unexpected OKX response
+- KuCoin MKR: Unexpected KuCoin response
+- OKX RUNE: Unexpected OKX response
+- MKR: fewer than two venues returned usable prices
 
 ## Important
 

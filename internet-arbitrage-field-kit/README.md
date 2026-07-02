@@ -59,13 +59,15 @@ It is observational only. It does not place trades.
 
 Latest published scan:
 
-- 12 assets scanned.
+- 43 assets scanned.
+- 42 usable rows generated.
 - Strict USDT-only mode enabled.
 - Assumed trade size: $100.
 - Assumed fee: 0.1% per side.
 - Assumed transfer/fixed cost: $0.25.
 - 0 rows remained positive after estimated trading fees and transfer/fixed cost.
-- Best rows were still negative after costs, so the current action is no-go/watch rather than trade.
+- The closest row was GRT, but it was still negative after fees and transfer/fixed cost.
+- Current action is no-go/watch rather than trade.
 
 ## Good For
 

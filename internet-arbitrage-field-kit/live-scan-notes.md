@@ -42,6 +42,13 @@ Stricter scan with a manual transfer/fixed-cost estimate and USDT-only venues:
 .\scan-crypto-spreads.ps1 -Proxy http://127.0.0.1:10808 -TransferCostUsd 0.25 -MinNetUsd 0.25 -StrictUsdtOnly -ExportCsv latest-spread-watch.csv -ReportPath latest-spread-watch.md
 ```
 
+Wider scan example:
+
+```powershell
+$assets = @("BTC","ETH","SOL","XRP","DOGE","ADA","AVAX","LINK","LTC","BCH","DOT","TRX","BNB","NEAR","ATOM","FIL","ETC","OP","ARB","SUI","UNI","AAVE","INJ","SEI","WLD","PEPE","SHIB","XLM","HBAR","ICP","ALGO","VET","RENDER","STX","IMX","GRT","ENS","MKR","LDO","RUNE","APT","TIA","JUP")
+.\scan-crypto-spreads.ps1 -Proxy http://127.0.0.1:10808 -TransferCostUsd 0.25 -MinNetUsd 0.25 -StrictUsdtOnly -Assets $assets -ExportCsv latest-spread-watch.csv -ReportPath latest-spread-watch.md
+```
+
 ## What It Calculates
 
 - Best observed buy ask.

@@ -52,3 +52,5 @@ For a stricter USDT-only scan with an assumed fixed transfer cost:
 ```
 
 The scan is observational only. It does not place trades or move funds.
+
+The latest included spread watch uses a wider asset list and records whether any observed row remains positive after the manual cost assumptions.
