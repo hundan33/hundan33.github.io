@@ -3,27 +3,210 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>hundan33 tools</title>
+  <title>hundan33 tools and downloads</title>
+  <meta name="description" content="Small offline browser tools and digital downloads for online sellers and spread evaluation.">
   <style>
-    body {
-      margin: 32px;
-      font-family: Arial, Helvetica, sans-serif;
-      line-height: 1.5;
+    :root {
+      --ink: #182126;
+      --muted: #53636c;
+      --line: #d8e0df;
+      --paper: #ffffff;
+      --wash: #f6f8f9;
+      --teal: #08786e;
+      --amber: #b45f06;
+      --blue: #315f9b;
     }
 
-    a {
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--ink);
+      background: var(--wash);
+      line-height: 1.5;
+      overflow-x: hidden;
+    }
+
+    a { color: inherit; }
+
+    h1,
+    h2,
+    p,
+    .button,
+    code {
+      overflow-wrap: anywhere;
+    }
+
+    main {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 40px 20px 56px;
+    }
+
+    header {
+      padding-bottom: 28px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(34px, 6vw, 64px);
+      line-height: 1;
+      letter-spacing: 0;
+    }
+
+    header p {
+      max-width: 720px;
+      color: var(--muted);
+      font-size: 18px;
+    }
+
+    .products {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      padding: 28px 0;
+    }
+
+    .product {
+      display: grid;
+      grid-template-rows: auto 1fr;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--paper);
+    }
+
+    .product img {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+      background: #eef3f8;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .body {
+      padding: 18px;
+    }
+
+    h2 {
+      margin: 0 0 8px;
+      font-size: 25px;
+      letter-spacing: 0;
+    }
+
+    .price {
+      margin: 0 0 12px;
+      color: var(--amber);
+      font-size: 24px;
+      font-weight: 800;
+    }
+
+    p { color: var(--muted); }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 10px 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #ffffff;
+      color: var(--ink);
+      font-weight: 700;
+      text-decoration: none;
+      text-align: center;
+    }
+
+    .button.primary {
+      border-color: var(--teal);
+      background: var(--teal);
+      color: #ffffff;
+    }
+
+    .pay {
+      padding: 20px 0;
+      border-top: 1px solid var(--line);
+    }
+
+    code {
       display: block;
-      margin: 10px 0;
+      overflow-wrap: anywhere;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #eef3f8;
+      color: var(--blue);
+    }
+
+    footer {
+      padding-top: 18px;
+      color: var(--muted);
+      border-top: 1px solid var(--line);
+      font-size: 14px;
+    }
+
+    @media (max-width: 760px) {
+      .products { grid-template-columns: 1fr; }
+      .button { width: 100%; }
     }
   </style>
 </head>
 <body>
-  <h1>hundan33 tools</h1>
-  <a href="/internet-arbitrage-field-kit/">Internet Arbitrage Field Kit</a>
-  <a href="https://github.com/hundan33/hundan33.github.io/raw/main/internet-arbitrage-field-kit/downloads/internet-arbitrage-field-kit.zip">Download Internet Arbitrage Field Kit</a>
-  <a href="/online-seller-mini-toolkit/">Online Seller Mini Toolkit</a>
-  <a href="/cdn_real.html">CDN scanner</a>
-  <a href="/extra_cidr.py">extra_cidr.py</a>
-  <a href="/social_password_gen.html">Social password generator</a>
+  <main>
+    <header>
+      <h1>hundan33 tools and downloads</h1>
+      <p>Small offline browser tools and digital downloads for online sellers, creators, and people checking spread math before they spend time or money.</p>
+    </header>
+
+    <section class="products" aria-label="Downloads">
+      <article class="product">
+        <img src="internet-arbitrage-field-kit/assets/calculator-preview.png" alt="Internet Arbitrage Field Kit calculator preview">
+        <div class="body">
+          <h2>Internet Arbitrage Field Kit</h2>
+          <div class="price">$19 suggested</div>
+          <p>Offline calculator, scanners, and checklists for evaluating online spreads after fees, transfer costs, slippage, and execution risk.</p>
+          <div class="actions">
+            <a class="button primary" href="https://github.com/hundan33/hundan33.github.io/raw/main/internet-arbitrage-field-kit/downloads/internet-arbitrage-field-kit.zip">Download kit</a>
+            <a class="button" href="internet-arbitrage-field-kit/">Open listing</a>
+            <a class="button" href="https://htmlpreview.github.io/?https://github.com/hundan33/hundan33.github.io/blob/main/internet-arbitrage-field-kit/spread-profit-calculator.html">Preview calculator</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="product">
+        <img src="online-seller-mini-toolkit/assets/cover-bundle.svg" alt="Online Seller Mini Toolkit cover">
+        <div class="body">
+          <h2>Online Seller Mini Toolkit</h2>
+          <div class="price">$39 suggested</div>
+          <p>Offline templates and browser tools for customer replies, product descriptions, marketplace listings, invoices, and launch planning.</p>
+          <div class="actions">
+            <a class="button primary" href="https://github.com/hundan33/hundan33.github.io/raw/main/online-seller-mini-toolkit/downloads/online-seller-mini-toolkit-bundle.zip">Download bundle</a>
+            <a class="button" href="online-seller-mini-toolkit/">Open listing</a>
+            <a class="button" href="https://github.com/hundan33/hundan33.github.io/raw/main/online-seller-mini-toolkit/downloads/online-seller-mini-toolkit-free-sample.zip">Free sample</a>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <section class="pay">
+      <h2>Pay Or Support</h2>
+      <p>Send USDC, USDT, DAI, or another agreed EVM asset only after confirming the chain and token.</p>
+      <code>0x1B18F54A416cA5d77945d9E05C66E3D00020578f</code>
+    </section>
+
+    <footer>
+      These files are practical templates and local browser tools. They do not guarantee sales, marketplace ranking, tax compliance, legal compliance, platform approval, trading profit, or bounty acceptance.
+    </footer>
+  </main>
 </body>
 </html>
