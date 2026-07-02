@@ -84,9 +84,10 @@ Latest funding-rate scan:
 
 Latest GitHub bounty scan:
 
-- 10 seeded public issue URLs checked through the proxy.
+- 10 seed URLs plus 4 GitHub Search queries checked through the proxy.
+- 20 issue URLs inspected after search discovery.
 - 0 rows met the direct-candidate filter after status and friction checks.
-- The largest cash-like issue was 250,000 sats, about $154.15 at scan time, but it required AIBTC identity and external account setup.
+- The largest cash-like issue was 250,000 sats, about $154.32 at scan time, but it required AIBTC identity and external account setup.
 - A $100 SecuritySkills issue was skipped because the repository bounty program is marked paused.
 - Closed, non-cash, too-small, paused, and external-account issues were filtered out or watch-listed.
 

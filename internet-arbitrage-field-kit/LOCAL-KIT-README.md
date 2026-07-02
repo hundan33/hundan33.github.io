@@ -72,4 +72,16 @@ Optional GitHub bounty scan:
 .\scan-github-bounties.ps1 -Proxy http://127.0.0.1:10808 -MinUsd 10 -ExportCsv latest-bounty-watch.csv -ReportPath latest-bounty-watch.md
 ```
 
-The bounty scan is observational only. It checks seeded public issue URLs, estimates cash-like reward value, filters closed/non-cash issues, and still requires a valid fork/PR/claim workflow before any payout is real.
+Optional search-assisted bounty scan:
+
+```powershell
+$queries = @(
+  'state:open "Bounty: $100" -security -exploit -CVE -attack -red',
+  'state:open "$100 bounty" "pull request" -security -exploit -CVE -attack',
+  'state:open "bounty" "USDC" "pull request" -security -exploit -CVE -attack',
+  'state:open "bounty" "$50" "good first issue" -security -exploit -CVE -attack'
+)
+.\scan-github-bounties.ps1 -Proxy http://127.0.0.1:10808 -MinUsd 10 -SearchQueries $queries -MaxSearchResultsPerQuery 5 -SearchDelaySec 7 -ExportCsv latest-bounty-watch.csv -ReportPath latest-bounty-watch.md
+```
+
+The bounty scan is observational only. It checks seeded public issue URLs, can optionally discover more URLs through GitHub Search, estimates cash-like reward value, filters closed/non-cash/paused/external-account issues, and still requires a valid fork/PR/claim workflow before any payout is real.

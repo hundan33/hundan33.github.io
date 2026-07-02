@@ -99,14 +99,29 @@ The `scan-github-bounties.ps1` script checks seeded public GitHub issue URLs and
 .\scan-github-bounties.ps1 -Proxy http://127.0.0.1:10808 -MinUsd 10 -ExportCsv latest-bounty-watch.csv -ReportPath latest-bounty-watch.md
 ```
 
+Search-assisted scan:
+
+```powershell
+$queries = @(
+  'state:open "Bounty: $100" -security -exploit -CVE -attack -red',
+  'state:open "$100 bounty" "pull request" -security -exploit -CVE -attack',
+  'state:open "bounty" "USDC" "pull request" -security -exploit -CVE -attack',
+  'state:open "bounty" "$50" "good first issue" -security -exploit -CVE -attack'
+)
+.\scan-github-bounties.ps1 -Proxy http://127.0.0.1:10808 -MinUsd 10 -SearchQueries $queries -MaxSearchResultsPerQuery 5 -SearchDelaySec 7 -ExportCsv latest-bounty-watch.csv -ReportPath latest-bounty-watch.md
+```
+
 It estimates:
 
 - XLM/USD bounty value when XLM rewards are detected.
+- BTC/USD value when sats rewards are detected.
 - USD reward value when direct cash amounts are detected.
 - Whether an issue appears closed.
 - Whether the reward appears non-cash.
+- Whether the repository bounty program appears paused.
+- Whether the issue requires external-account setup before work can start.
 - Whether the reward meets a minimum candidate value.
 
-The latest included seed scan checked 10 issue URLs and found 0 direct candidates above the $10 threshold after status and friction filters. The largest cash-like issue was 250,000 sats, about $154.15 at scan time, but it requires AIBTC identity, external account setup, and GitHub issue claiming before work can start. A $100 SecuritySkills issue was skipped because the repository bounty program is marked paused, and a $100 Memanto issue was watch-listed because it requires external service/BountyHub participation.
+The latest included search-assisted scan checked 20 issue URLs and found 0 direct candidates above the $10 threshold after status and friction filters. The largest cash-like issue was 250,000 sats, about $154.32 at scan time, but it requires AIBTC identity, external account setup, and GitHub issue claiming before work can start. A $100 SecuritySkills issue was skipped because the repository bounty program is marked paused, and a $100 Memanto issue was watch-listed because it requires external service/BountyHub participation.
 
 It does not create forks, open pull requests, reserve bounties, verify maintainer payout history, complete external account setup, or guarantee acceptance.

@@ -19,7 +19,7 @@ Included:
 - Offline spread profit calculator.
 - Read-only crypto spread scanner with proxy support.
 - Read-only funding-rate scanner with fee-recovery filters.
-- Read-only GitHub bounty scanner with proxy support.
+- Read-only GitHub bounty scanner with proxy and optional GitHub Search support.
 - Manual transfer-cost and minimum-net filters.
 - Internet arbitrage opportunity map.
 - Opportunity ledger CSV.
@@ -34,7 +34,7 @@ Good for:
 - Affiliate/referral ROI checks.
 - Crypto spread observation.
 - API/data packaging ideas.
-- GitHub issue bounty triage.
+- GitHub issue bounty search and triage.
 - Online-only productized workflows.
 
 Important:

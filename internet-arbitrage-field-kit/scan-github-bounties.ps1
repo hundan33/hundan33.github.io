@@ -16,6 +16,9 @@ param(
         "https://github.com/UnitOneAI/SecuritySkills/issues/2026",
         "https://github.com/auscaster/frantic-board/issues/63"
     ),
+    [string[]]$SearchQueries = @(),
+    [int]$MaxSearchResultsPerQuery = 8,
+    [int]$SearchDelaySec = 7,
     [string]$ExportCsv = "",
     [string]$ReportPath = ""
 )
@@ -123,6 +126,23 @@ function Test-RepoProgramPaused {
     return $paused
 }
 
+function Add-UniqueUrl {
+    param(
+        [System.Collections.Generic.List[string]]$Urls,
+        [hashtable]$Seen,
+        [string]$Url
+    )
+
+    if ([string]::IsNullOrWhiteSpace($Url)) {
+        return
+    }
+
+    if (-not $Seen.ContainsKey($Url)) {
+        $Seen[$Url] = $true
+        $Urls.Add($Url)
+    }
+}
+
 function Get-Reward {
     param([string]$Title, [string]$Body, [decimal]$CurrentXlmUsd, [decimal]$CurrentBtcUsd)
 
@@ -171,9 +191,20 @@ function Get-Reward {
         }
     }
 
-    $usdMatch = [regex]::Match($text, '(?i)(?:bounty|reward|payout)\s*:\s*\$?(?<amount>\d+(?:\.\d+)?)\s*(?:USD|USDC)?')
-    if ($usdMatch.Success) {
-        $amount = [decimal]$usdMatch.Groups["amount"].Value
+    $dollarMatch = [regex]::Match($text, '(?i)(?:bounty|reward|payout|requested bounty)\s*:\s*\$(?<amount>\d+(?:\.\d+)?)')
+    if ($dollarMatch.Success) {
+        $amount = [decimal]$dollarMatch.Groups["amount"].Value
+        return [PSCustomObject]@{
+            RewardAmount = $amount
+            RewardCurrency = "USD"
+            ApproxUsd = [Math]::Round($amount, 4)
+            CashLike = $true
+        }
+    }
+
+    $usdCurrencyMatch = [regex]::Match($text, '(?i)(?:bounty|reward|payout|requested bounty)\s*:\s*(?<amount>\d+(?:\.\d+)?)\s*(?:USD|USDC)\b')
+    if ($usdCurrencyMatch.Success) {
+        $amount = [decimal]$usdCurrencyMatch.Groups["amount"].Value
         return [PSCustomObject]@{
             RewardAmount = $amount
             RewardCurrency = "USD"
@@ -208,8 +239,43 @@ if ($XlmUsd -le 0 -or $BtcUsd -le 0) {
 $scanStarted = Get-Date
 $rows = New-Object System.Collections.Generic.List[object]
 $warnings = New-Object System.Collections.Generic.List[string]
+$scanUrls = New-Object System.Collections.Generic.List[string]
+$urlSeen = @{}
+$searchQueriesRun = 0
+$searchUrlsAdded = 0
 
-foreach ($url in ($SeedUrls | Sort-Object -Unique)) {
+foreach ($seedUrl in $SeedUrls) {
+    Add-UniqueUrl $scanUrls $urlSeen $seedUrl
+}
+
+foreach ($query in ($SearchQueries | Where-Object { -not [string]::IsNullOrWhiteSpace($_) })) {
+    try {
+        $encodedQuery = [uri]::EscapeDataString($query)
+        $searchUri = "https://api.github.com/search/issues?q=$encodedQuery&per_page=$MaxSearchResultsPerQuery"
+        $searchResult = Invoke-Json $searchUri
+        $searchQueriesRun += 1
+
+        foreach ($item in $searchResult.items) {
+            if ($item.PSObject.Properties.Name -contains "pull_request") {
+                continue
+            }
+
+            $before = $scanUrls.Count
+            Add-UniqueUrl $scanUrls $urlSeen $item.html_url
+            if ($scanUrls.Count -gt $before) {
+                $searchUrlsAdded += 1
+            }
+        }
+    } catch {
+        $warnings.Add("search [$query]: $($_.Exception.Message)")
+    }
+
+    if ($SearchDelaySec -gt 0) {
+        Start-Sleep -Seconds $SearchDelaySec
+    }
+}
+
+foreach ($url in $scanUrls) {
     try {
         $html = Invoke-Text $url
         $title = Get-TitleFromHtml $html
@@ -308,7 +374,10 @@ if (-not [string]::IsNullOrWhiteSpace($ReportPath)) {
     $lines.Add("")
     $lines.Add("## Summary")
     $lines.Add("")
-    $lines.Add(("Seed URLs checked: {0}" -f $SeedUrls.Count))
+    $lines.Add(("Seed URLs configured: {0}" -f $SeedUrls.Count))
+    $lines.Add(("Search queries run: {0}" -f $searchQueriesRun))
+    $lines.Add(("Search URLs added: {0}" -f $searchUrlsAdded))
+    $lines.Add(("URLs checked: {0}" -f $scanUrls.Count))
     $lines.Add(("Rows generated: {0}" -f $rows.Count))
     $lines.Add(("Candidate rows: {0}" -f $candidates.Count))
     if ($candidates.Count -eq 0) {
