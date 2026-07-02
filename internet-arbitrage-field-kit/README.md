@@ -8,6 +8,8 @@ Suggested payment: **$19** if useful.
 
 - [Download the full kit](https://github.com/hundan33/hundan33.github.io/raw/main/internet-arbitrage-field-kit/downloads/internet-arbitrage-field-kit.zip)
 - [Open the calculator file](spread-profit-calculator.html)
+- [Download the live scan script](scan-crypto-spreads.ps1)
+- [Read live scan notes](live-scan-notes.md)
 - [Read the arbitrage map](internet-arbitrage-map.md)
 - [Read the opportunity radar](opportunity-radar.md)
 - [Read the deal checklist](deal-evaluation-checklist.md)
@@ -35,6 +37,14 @@ Raw spreads can be misleading. A deal that looks profitable can fail after:
 - Time and execution risk.
 
 The calculator helps you estimate net profit, ROI, break-even price, and units needed to reach a target like $100.
+
+The optional PowerShell scanner can read public ticker APIs through a local proxy and compare observed BTC/ETH/SOL spot prices across Binance, OKX, KuCoin, and Coinbase:
+
+```powershell
+.\scan-crypto-spreads.ps1 -Proxy http://127.0.0.1:10808
+```
+
+It is observational only. It does not place trades.
 
 ## Good For
 
