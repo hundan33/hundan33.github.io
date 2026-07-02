@@ -18,6 +18,7 @@ Included:
 
 - Offline spread profit calculator.
 - Read-only crypto spread scanner with proxy support.
+- Read-only funding-rate scanner with fee-recovery filters.
 - Manual transfer-cost and minimum-net filters.
 - Internet arbitrage opportunity map.
 - Opportunity ledger CSV.

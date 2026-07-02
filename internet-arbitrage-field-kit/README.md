@@ -10,9 +10,12 @@ Suggested payment: **$19** if useful.
 - [Download the full kit](https://github.com/hundan33/hundan33.github.io/raw/main/internet-arbitrage-field-kit/downloads/internet-arbitrage-field-kit.zip)
 - [Open the calculator file](spread-profit-calculator.html)
 - [Download the live scan script](scan-crypto-spreads.ps1)
+- [Download the funding-rate scan script](scan-funding-rates.ps1)
 - [Read live scan notes](live-scan-notes.md)
 - [Read latest spread watch report](latest-spread-watch.md)
 - [Download latest spread watch CSV](latest-spread-watch.csv)
+- [Read latest funding watch report](latest-funding-watch.md)
+- [Download latest funding watch CSV](latest-funding-watch.csv)
 - [Read the arbitrage map](internet-arbitrage-map.md)
 - [Read the opportunity radar](opportunity-radar.md)
 - [Read the deal checklist](deal-evaluation-checklist.md)
@@ -68,6 +71,13 @@ Latest published scan:
 - 0 rows remained positive after estimated trading fees and transfer/fixed cost.
 - The closest row was GRT, but it was still negative after fees and transfer/fixed cost.
 - Current action is no-go/watch rather than trade.
+
+Latest funding-rate scan:
+
+- 42 assets scanned.
+- 120 usable funding rows generated.
+- 0 rows met the annualized-rate and fee-recovery filters.
+- The strongest observed row was BNB on Binance Futures at about 11.93% annualized, but it still needed about 37 funding intervals to cover estimated entry/exit fees at the default assumptions.
 
 ## Good For
 

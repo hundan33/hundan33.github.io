@@ -72,3 +72,21 @@ $assets = @("BTC","ETH","SOL","XRP","DOGE","ADA","AVAX","LINK","LTC","BCH","DOT"
 - Counterparty or platform risk.
 
 Do not trade just because a raw spread looks positive.
+
+## Funding Rate Scan
+
+The `scan-funding-rates.ps1` script checks public funding-rate endpoints for simple spot-long/perp-short observation.
+
+```powershell
+.\scan-funding-rates.ps1 -Proxy http://127.0.0.1:10808 -TradeUsd 100 -FeePercentPerSide 0.1 -MinAnnualizedPct 20 -MaxIntervalsToCoverFees 6 -ExportCsv latest-funding-watch.csv -ReportPath latest-funding-watch.md
+```
+
+It estimates:
+
+- Funding rate per interval.
+- Approximate annualized funding rate.
+- Funding dollars per interval and per day on a chosen trade size.
+- Estimated entry/exit fee burden.
+- Funding intervals needed to cover estimated fees.
+
+It does not include basis movement, liquidation risk, borrow costs, margin requirements, exchange risk, taxes, unavailable markets, or execution slippage.
