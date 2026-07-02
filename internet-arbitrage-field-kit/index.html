@@ -209,6 +209,21 @@
       color: var(--ink);
     }
 
+    .pay-inner {
+      display: grid;
+      grid-template-columns: 1fr 160px;
+      gap: 18px;
+      align-items: center;
+    }
+
+    .qr {
+      width: 160px;
+      height: 160px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #ffffff;
+    }
+
     footer {
       padding: 26px 20px 44px;
       color: var(--muted);
@@ -231,6 +246,13 @@
       .grid,
       .stat {
         grid-template-columns: 1fr;
+      }
+      .pay-inner {
+        grid-template-columns: 1fr;
+      }
+      .qr {
+        width: 148px;
+        height: 148px;
       }
       .price { white-space: normal; }
     }
@@ -290,12 +312,17 @@
     </section>
 
     <section class="section pay">
-      <h2>Pay or support</h2>
-      <p>Send USDC, USDT, DAI, or another agreed EVM asset only after confirming the chain and token.</p>
-      <code>0x1B18F54A416cA5d77945d9E05C66E3D00020578f</code>
-      <div class="actions">
-        <a class="button" href="https://github.com/hundan33/hundan33.github.io/raw/main/internet-arbitrage-field-kit/downloads/internet-arbitrage-field-kit.zip">Download zip</a>
-        <a class="button secondary" style="color:var(--ink);border-color:var(--line)" href="README.md">View file listing</a>
+      <div class="pay-inner">
+        <div>
+          <h2>Pay or support</h2>
+          <p>Send USDC, USDT, DAI, or another agreed EVM asset only after confirming the chain and token.</p>
+          <code>0x1B18F54A416cA5d77945d9E05C66E3D00020578f</code>
+          <div class="actions">
+            <a class="button" href="https://github.com/hundan33/hundan33.github.io/raw/main/internet-arbitrage-field-kit/downloads/internet-arbitrage-field-kit.zip">Download zip</a>
+            <a class="button secondary" style="color:var(--ink);border-color:var(--line)" href="README.md">View file listing</a>
+          </div>
+        </div>
+        <img class="qr" src="assets/payment-address-qr.png" alt="Payment address QR code">
       </div>
     </section>
   </main>
