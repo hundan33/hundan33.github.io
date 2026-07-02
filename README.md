@@ -4,12 +4,35 @@ Small online tools and digital downloads.
 
 ## Start Here
 
-- [Download the free sample](https://github.com/hundan33/hundan33.github.io/raw/main/online-seller-mini-toolkit/downloads/online-seller-mini-toolkit-free-sample.zip)
+- [Open the Internet Arbitrage Field Kit](https://github.com/hundan33/hundan33.github.io/tree/main/internet-arbitrage-field-kit)
+- [Download the Internet Arbitrage Field Kit](https://github.com/hundan33/hundan33.github.io/raw/main/internet-arbitrage-field-kit/downloads/internet-arbitrage-field-kit.zip)
+- [Download the free seller toolkit sample](https://github.com/hundan33/hundan33.github.io/raw/main/online-seller-mini-toolkit/downloads/online-seller-mini-toolkit-free-sample.zip)
 - [Download the full Online Seller Mini Toolkit](https://github.com/hundan33/hundan33.github.io/raw/main/online-seller-mini-toolkit/downloads/online-seller-mini-toolkit-bundle.zip)
-- Suggested payment: **$39** to `0x1B18F54A416cA5d77945d9E05C66E3D00020578f`
 - [Share copy](online-seller-mini-toolkit/live-share-kit.md)
 
+Suggested payments: **$19** for the arbitrage kit, **$39** for the seller toolkit to `0x1B18F54A416cA5d77945d9E05C66E3D00020578f`.
+
 ## Featured Download
+
+### Internet Arbitrage Field Kit
+
+Offline calculator, scanners, and checklists for evaluating online spreads after fees.
+
+Use it to check:
+
+- Marketplace and digital product pricing gaps.
+- Crypto spot spreads after estimated fees and transfer costs.
+- Funding-rate opportunities after fee recovery.
+- GitHub issue bounty candidates before spending time on a PR.
+- Net profit, ROI, and units needed to reach $100.
+
+Suggested payment: **$19** if the kit is useful.
+
+- [Open the product listing](https://github.com/hundan33/hundan33.github.io/tree/main/internet-arbitrage-field-kit)
+- [Preview the calculator online](https://htmlpreview.github.io/?https://github.com/hundan33/hundan33.github.io/blob/main/internet-arbitrage-field-kit/spread-profit-calculator.html)
+- [Download the full kit](https://github.com/hundan33/hundan33.github.io/raw/main/internet-arbitrage-field-kit/downloads/internet-arbitrage-field-kit.zip)
+- [Read the latest bounty watch](https://github.com/hundan33/hundan33.github.io/blob/main/internet-arbitrage-field-kit/latest-bounty-watch.md)
+- [Read the latest live spread watch](https://github.com/hundan33/hundan33.github.io/blob/main/internet-arbitrage-field-kit/latest-spread-watch.md)
 
 ### Online Seller Mini Toolkit
 
@@ -30,32 +53,13 @@ Suggested payment: **$39** if the toolkit is useful.
 - [Download the free sample](https://github.com/hundan33/hundan33.github.io/raw/main/online-seller-mini-toolkit/downloads/online-seller-mini-toolkit-free-sample.zip)
 - [See free customer reply templates](online-seller-mini-toolkit/free-customer-reply-templates.md)
 
-### Internet Arbitrage Field Kit
-
-Offline calculator and checklist kit for evaluating online price spreads after fees.
-
-Use it to check:
-
-- Buy/sell spread.
-- Platform and payment fees.
-- Transfer/network fees.
-- Slippage and reserves.
-- Net profit, ROI, and units needed to reach $100.
-
-Suggested payment: **$19** if useful.
-
-- [Open the arbitrage kit listing](internet-arbitrage-field-kit/)
-- [Preview the arbitrage calculator online](https://htmlpreview.github.io/?https://github.com/hundan33/hundan33.github.io/blob/main/internet-arbitrage-field-kit/spread-profit-calculator.html)
-- [Download the arbitrage kit](https://github.com/hundan33/hundan33.github.io/raw/main/internet-arbitrage-field-kit/downloads/internet-arbitrage-field-kit.zip)
-- [Read the arbitrage map](internet-arbitrage-field-kit/internet-arbitrage-map.md)
-- [Read the latest live spread watch](internet-arbitrage-field-kit/latest-spread-watch.md)
-
 ## Pay Or Support
 
 EVM address:
 
 `0x1B18F54A416cA5d77945d9E05C66E3D00020578f`
 
+Suggested payment for the Internet Arbitrage Field Kit: **$19**.
 Suggested payment for the Online Seller Mini Toolkit: **$39**.
 
 Confirm chain and token before sending. Crypto transfers are irreversible.
